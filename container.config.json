@@ -1,0 +1,30 @@
+{
+  "containerPort": 80,
+  "minNum": 0,
+  "maxNum": 5,
+  "cpu": 1,
+  "mem": 2,
+  "policyType": "cpu",
+  "policyThreshold": 60,
+  "policyDetails": [
+    {
+      "PolicyType": "cpu",
+      "PolicyThreshold": 60
+    },
+    {
+      "PolicyType": "mem",
+      "PolicyThreshold": 60
+    }
+  ],
+  "envParams": {
+    "API_HOST": "0.0.0.0",
+    "API_PORT": "80",
+    "WECHAT_AUTH_MOCK": "0",
+    "POSTGRES_POOL_MIN": "1",
+    "POSTGRES_POOL_MAX": "8",
+    "POSTGRES_POOL_WAIT_SECONDS": "5",
+    "POSTGRES_CONNECT_TIMEOUT": "5"
+  },
+  "customLogs": "stdout",
+  "initialDelaySeconds": 2
+}
