@@ -1,0 +1,9 @@
+ALTER TABLE routes
+  ADD COLUMN IF NOT EXISTS polyline TEXT,
+  ADD COLUMN IF NOT EXISTS start_date DATE,
+  ADD COLUMN IF NOT EXISTS end_date DATE,
+  ADD COLUMN IF NOT EXISTS estimated_days INTEGER,
+  ADD COLUMN IF NOT EXISTS schedule JSONB;
+
+CREATE INDEX IF NOT EXISTS idx_routes_start_date ON routes(start_date);
+

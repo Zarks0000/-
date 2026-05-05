@@ -1,0 +1,273 @@
+export const exploreTemplates = [
+  {
+    id: 't1',
+    type: 'template',
+    title: '周末短途',
+    desc: '适合1-2天周边游',
+    icon: 'Compass',
+    iconColor: 'text-blue-500',
+    iconBg: 'bg-blue-50',
+    image: '/static/images/scooter-country.jpg',
+    days: 2,
+    style: 'leisure',
+    schedule: [
+      { day: 1, title: '出发前往周边风景区', distance_km: 150, description: '轻松骑行，享受沿途风景，下午到达目的地。' },
+      { day: 2, title: '返程', distance_km: 150, description: '睡到自然醒，游览周边后返程。' }
+    ],
+    applyArgs: { name: '周末短途', ridingStyle: 'leisure' }
+  },
+  {
+    id: 't2',
+    type: 'template',
+    title: '高原线路',
+    desc: '高反预防与保暖装备',
+    icon: 'Mountain',
+    iconColor: 'text-orange-500',
+    iconBg: 'bg-orange-50',
+    image: '/static/images/adv-mountain.jpg',
+    days: 5,
+    style: 'aggressive',
+    schedule: [
+      { day: 1, title: '进入高原，适应海拔', distance_km: 300, description: '注意保暖，避免剧烈运动。' },
+      { day: 2, title: '翻越达坂', distance_km: 250, description: '气温较低，注意暗冰。' },
+      { day: 3, title: '高原湖泊巡游', distance_km: 200, description: '风景极佳，随时停车拍照。' },
+      { day: 4, title: '雪山草原', distance_km: 280, description: '路况较好，但需注意横风。' },
+      { day: 5, title: '安全下撤', distance_km: 350, description: '海拔降低，安全返回。' }
+    ],
+    applyArgs: { name: '高原探索', ridingStyle: 'aggressive' }
+  },
+  {
+    id: 't3',
+    type: 'template',
+    title: '国道线路',
+    desc: '跨省长途与沿途风光',
+    icon: 'MapIcon',
+    iconColor: 'text-emerald-500',
+    iconBg: 'bg-emerald-50',
+    image: '/static/images/cruiser-highway.jpg',
+    days: 7,
+    style: 'normal',
+    schedule: [
+      { day: 1, title: '国道启程', distance_km: 400, description: '熟悉路况，保持匀速。' },
+      { day: 2, title: '跨越省界', distance_km: 380, description: '打卡省界标志，品尝异地美食。' },
+      { day: 3, title: '沿途风光', distance_km: 350, description: '穿越村镇，感受人文。' },
+      { day: 4, title: '山路挑战', distance_km: 250, description: '进入山区，注意弯道。' },
+      { day: 5, title: '平原巡航', distance_km: 450, description: '路况平直，注意防范疲劳驾驶。' },
+      { day: 6, title: '接近终点', distance_km: 300, description: '调整节奏，准备到达。' },
+      { day: 7, title: '胜利抵达', distance_km: 200, description: '抵达目的地，庆祝完成跨省之旅。' }
+    ],
+    applyArgs: { name: '国道摩旅', ridingStyle: 'normal' }
+  }
+]
+
+export const exploreRoutes = [
+  {
+    id: 'r1',
+    type: 'route',
+    title: '环海南岛',
+    desc: '天涯海角，阳光沙滩',
+    coverGradient: 'from-blue-400 to-indigo-500',
+    image: '/static/images/city-short.jpg',
+    days: 6,
+    style: 'leisure',
+    schedule: [
+      { day: 1, title: '海口 - 文昌', distance_km: 100, description: '沿着东海岸出发，感受海风。' },
+      { day: 2, title: '文昌 - 琼海 - 万宁', distance_km: 120, description: '途径博鳌，品尝海鲜。' },
+      { day: 3, title: '万宁 - 陵水 - 三亚', distance_km: 150, description: '最美海岸线，抵达三亚。' },
+      { day: 4, title: '三亚休整', distance_km: 50, description: '三亚周边游玩，免税店购物。' },
+      { day: 5, title: '三亚 - 乐东 - 东方', distance_km: 180, description: '转入西线，领略不同风情。' },
+      { day: 6, title: '东方 - 儋州 - 海口', distance_km: 250, description: '西线疾驰，返回海口。' }
+    ],
+    applyArgs: { name: '环海南岛之旅', origin: '海口', destination: '三亚', waypointsStr: '三亚,陵水,文昌', ridingStyle: 'leisure' }
+  },
+  {
+    id: 'r2',
+    type: 'route',
+    title: '川藏南线 (G318)',
+    desc: '此生必驾，信仰之路',
+    coverGradient: 'from-emerald-500 to-teal-700',
+    image: '/static/images/adv-mountain.jpg',
+    days: 12,
+    style: 'aggressive',
+    schedule: [
+      { day: 1, title: '成都 - 雅安', distance_km: 150, description: '雨城雅安，品尝雅鱼。' },
+      { day: 2, title: '雅安 - 康定 - 新都桥', distance_km: 200, description: '翻越折多山，进入摄影家的天堂。' },
+      { day: 3, title: '新都桥 - 理塘', distance_km: 220, description: '世界高城理塘，体验高原风光。' },
+      { day: 4, title: '理塘 - 巴塘', distance_km: 180, description: '穿越海子山，抵达巴塘。' },
+      { day: 5, title: '巴塘 - 芒康', distance_km: 100, description: '跨越金沙江，正式进入西藏。' },
+      { day: 6, title: '芒康 - 左贡 - 八宿', distance_km: 280, description: '翻越觉巴山、东达山，挑战怒江72拐。' },
+      { day: 7, title: '八宿 - 然乌 - 波密', distance_km: 220, description: '然乌湖美景，进入绿海明珠波密。' },
+      { day: 8, title: '波密 - 鲁朗 - 林芝', distance_km: 230, description: '通麦天险（已成通途），抵达林芝。' },
+      { day: 9, title: '林芝 - 工布江达', distance_km: 150, description: '尼洋河风光，翻越米拉山。' },
+      { day: 10, title: '工布江达 - 拉萨', distance_km: 280, description: '圣城拉萨，圆梦布达拉宫。' }
+    ],
+    applyArgs: { name: '318川藏南线', origin: '成都', destination: '拉萨', waypointsStr: '雅安,康定,理塘,巴塘,波密,林芝', ridingStyle: 'aggressive' }
+  },
+  {
+    id: 'r3',
+    type: 'route',
+    title: '新疆独库公路',
+    desc: '一天历经四季，绝美天山',
+    coverGradient: 'from-orange-400 to-red-500',
+    image: '/static/images/cruiser-highway.jpg',
+    days: 5,
+    style: 'aggressive',
+    schedule: [
+      { day: 1, title: '独山子 - 乔尔玛', distance_km: 140, description: '翻越哈希勒根达坂，致敬筑路英雄。' },
+      { day: 2, title: '乔尔玛 - 那拉提', distance_km: 120, description: '百里画廊，抵达那拉提草原。' },
+      { day: 3, title: '那拉提 - 巴音布鲁克', distance_km: 80, description: '翻越玉希莫勒盖达坂，九曲十八弯日落。' },
+      { day: 4, title: '巴音布鲁克 - 大小龙池', distance_km: 150, description: '翻越铁力买提达坂，库车大峡谷初探。' },
+      { day: 5, title: '大小龙池 - 库车', distance_km: 130, description: '穿越天山神秘大峡谷，抵达南疆库车。' }
+    ],
+    applyArgs: { name: '独库公路穿越', origin: '独山子', destination: '库车', waypointsStr: '乔尔玛,那拉提,巴音布鲁克', ridingStyle: 'aggressive' }
+  },
+  {
+    id: 'r4',
+    type: 'route',
+    title: '皖南川藏线',
+    desc: '江南天路，绝美山水画廊',
+    coverGradient: 'from-green-400 to-emerald-500',
+    image: '/static/images/retro-rest.jpg',
+    days: 3,
+    style: 'normal',
+    schedule: [
+      { day: 1, title: '宁国 - 青龙湾 - 储家滩', distance_km: 60, description: '青龙湾水库，储家滩摄影胜地。' },
+      { day: 2, title: '储家滩 - 方塘乡 - 桃岭公路', distance_km: 80, description: '红杉林，挑战桃岭72拐。' },
+      { day: 3, title: '桃岭 - 泾县', distance_km: 50, description: '水墨汀溪，抵达泾县。' }
+    ],
+    applyArgs: { name: '皖南川藏线', origin: '宁国', destination: '泾县', waypointsStr: '青龙乡,储家滩,方塘乡,桃岭公路', ridingStyle: 'normal' }
+  },
+  {
+    id: 'r5',
+    type: 'route',
+    title: '丝绸之路·河西走廊',
+    desc: '大漠孤烟，历史长歌',
+    coverGradient: 'from-amber-400 to-orange-500',
+    image: '/static/images/city-short.jpg',
+    days: 7,
+    style: 'normal',
+    schedule: [
+      { day: 1, title: '兰州 - 武威', distance_km: 280, description: '跨越黄河，进入河西走廊，游览雷台汉墓。' },
+      { day: 2, title: '武威 - 金昌 - 张掖', distance_km: 250, description: '途径金昌，抵达张掖七彩丹霞。' },
+      { day: 3, title: '张掖休整', distance_km: 50, description: '深度游览丹霞地貌与大佛寺。' },
+      { day: 4, title: '张掖 - 嘉峪关', distance_km: 230, description: '天下第一雄关，感受长城壮阔。' },
+      { day: 5, title: '嘉峪关 - 瓜州 - 敦煌', distance_km: 260, description: '途径瓜州吃瓜，抵达敦煌。' },
+      { day: 6, title: '敦煌深度游', distance_km: 80, description: '莫高窟探秘，鸣沙山月牙泉。' },
+      { day: 7, title: '敦煌周边', distance_km: 150, description: '玉门关，阳关故址，行程结束。' }
+    ],
+    applyArgs: { name: '河西走廊', origin: '兰州', destination: '敦煌', waypointsStr: '武威,张掖,酒泉,嘉峪关', ridingStyle: 'normal' }
+  }
+]
+
+export const exploreKnowledge = [
+  {
+    id: 'k1',
+    title: '长途出行前车辆全面检查指南',
+    desc: '机油、刹车片、链条张紧度、轮胎磨损等8个关键点检查方法...',
+    content: `1. 机油与机滤：检查机油液位和颜色，长途前建议更换全新机油。\n2. 轮胎：检查胎压是否符合标准，轮胎花纹深度是否足够，有无扎钉或偏磨现象。\n3. 刹车系统：检查前后刹车片厚度，制动液液位，确保刹车手感正常。\n4. 链条：清洗并润滑链条，按说明书调整张紧度。\n5. 灯光与电气：检查大灯、转向灯、刹车灯是否正常工作，电瓶电压是否充足。\n6. 冷却系统：检查冷却液液位，检查水箱有无渗漏。\n7. 紧固件：检查全车主要螺丝是否松动，尤其是风挡、货架和护杠。\n8. 随车工具：确保原车工具齐全，备好补胎液和打气筒。`,
+    readTime: 5,
+    icon: 'Wrench',
+    iconColor: 'text-slate-400',
+    iconBg: 'bg-slate-200',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20close-up%20shot%20of%20a%20mechanic%27s%20hands%20inspecting%20a%20motorcycle%20engine%20and%20tires%20in%20a%20well-lit%20garage.%20Professional%20tools%20scattered%20around.%20High%20quality%2C%20realistic%2C%20detailed.&image_size=square',
+  },
+  {
+    id: 'k2',
+    title: '摩托车骑行装备选购避坑指南',
+    desc: '头盔、骑行服、手套、护具的选购标准与防坑建议...',
+    content: `1. 头盔：认准 3C/DOT/ECE 认证，全盔安全性最高，长途不建议佩戴半盔。\n2. 骑行服：拉力服适合长途，内置 CE 认证护具，需具备防水和保暖内胆。\n3. 手套：必须带有关节硬壳保护，建议准备一双夏季通风、一双冬季防水保暖手套。\n4. 骑行靴：保护脚踝是核心，硬底且防水的拉力靴是长途首选，切忌穿软底运动鞋。\n5. 雨具：分体式雨衣防雨效果最好，建议购买摩托车专用雨衣，避免风阻过大。`,
+    readTime: 6,
+    icon: 'Package',
+    iconColor: 'text-indigo-400',
+    iconBg: 'bg-indigo-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20collection%20of%20premium%20motorcycle%20riding%20gear%20laid%20out%20neatly%20on%20a%20wooden%20table%2C%20including%20a%20full-face%20helmet%2C%20leather%20gloves%2C%20and%20an%20armored%20jacket.%20Studio%20lighting%2C%20high%20resolution.&image_size=square',
+  },
+  {
+    id: 'k3',
+    title: '高原摩旅防高反与应对策略',
+    desc: '如何科学预防高反？缺氧、失温时的正确应对方法...',
+    content: `1. 行前准备：提前半个月服用红景天等药物，保持良好的作息。\n2. 阶梯式爬升：不要一天内直接飙升到 4000 米以上，给身体留出适应时间。\n3. 保暖防风：高原天气多变，失温极易诱发高反，骑行时必须穿戴好防风保暖装备。\n4. 饮食与水分：多喝热水，饮食清淡，切忌暴饮暴食和饮酒。\n5. 应对症状：如出现严重头痛、呕吐、呼吸困难，立即停止前进，吸氧并尽快向低海拔地区下撤。`,
+    readTime: 4,
+    icon: 'Mountain',
+    iconColor: 'text-orange-400',
+    iconBg: 'bg-orange-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20motorcycle%20parked%20on%20a%20high-altitude%20mountain%20pass%20with%20snow-capped%20peaks%20in%20the%20background.%20Clear%20blue%20sky%2C%20crisp%20air%2C%20cinematic%20landscape%20photography.&image_size=square',
+  },
+  {
+    id: 'k4',
+    title: '雨天及恶劣天气骑行安全法则',
+    desc: '视线受阻、路面湿滑时的刹车与过弯技巧...',
+    content: `1. 降低车速：雨天路面摩擦力急剧下降，必须降低车速，拉大与前车的安全距离。\n2. 柔和操作：油门、刹车、离合的操作都要尽量柔和，严禁大力捏死前刹。\n3. 避开标识线与斑马线：湿滑的白线、井盖和铁板比冰面还滑，尽量避开或垂直匀速通过。\n4. 视线清晰：使用带防雾贴片（Pinlock）的头盔，并在镜片外侧涂抹驱水剂。\n5. 醒目自己：穿戴带反光条的雨衣，开启双闪或雾灯，确保被其他车辆看见。`,
+    readTime: 5,
+    icon: 'CloudSun',
+    iconColor: 'text-sky-400',
+    iconBg: 'bg-sky-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20motorcycle%20riding%20through%20a%20wet%2C%20rainy%20city%20street%20at%20night%20with%20neon%20lights%20reflecting%20on%20puddles.%20Rider%20wearing%20high-visibility%20rain%20gear.%20Moody%20atmosphere%2C%20cyberpunk%20vibes.&image_size=square',
+  },
+  {
+    id: 'k5',
+    title: '摩旅途中常见突发状况及急救',
+    desc: '扎胎、摔车擦伤、迷路等突发事件的应急处理方案...',
+    content: `1. 扎胎处理：使用真空胎补胎胶条或辣条进行快速修补，随车务必携带电动充气泵。\n2. 摔车擦伤：随车携带急救包（碘伏、创可贴、纱布、绷带），先清理伤口再包扎。\n3. 车辆亏电：备好摩托车应急启动电源，或者携带搭电线向过往车辆求助。\n4. 迷路与无信号：提前下载好离线地图（如高德离线地图），规划好路线并告知家人。\n5. 疲劳驾驶：每骑行 1-2 小时必须停车休息 10 分钟，做做拉伸，补充水分。`,
+    readTime: 7,
+    icon: 'ShieldAlert',
+    iconColor: 'text-red-400',
+    iconBg: 'bg-red-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20first%20aid%20kit%2C%20a%20tire%20repair%20tool%2C%20and%20a%20map%20laid%20out%20next%20to%20a%20motorcycle%20wheel%20on%20a%20gravel%20road.%20Emergency%20preparedness%20concept%2C%20realistic%20photography.&image_size=square',
+  },
+  {
+    id: 'k6',
+    title: '非铺装路面(非硬化路)骑行入门技巧',
+    desc: '碎石、泥巴、沙地路面的控车姿势与安全法则...',
+    content: `1. 视线放远：不要死盯前轮，看向你要去的方向，视线决定了车轮的轨迹。\n2. 站立骑行：双腿夹紧油箱，膝盖微曲充当人体避震，双手放松搭在车把上。\n3. 重心转移：加速时身体前倾，减速或下坡时身体后移，利用体重控制车辆。\n4. 慎用前刹：在碎石和泥地上大力使用前刹极易导致前轮滑移倒车，应以发动机牵引力制动和后刹为主。\n5. 顺应车头：遇到车头轻微摆动时不要死死僵住手臂，适当让车头顺应路面起伏。`,
+    readTime: 6,
+    icon: 'Map',
+    iconColor: 'text-amber-500',
+    iconBg: 'bg-amber-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=An%20adventure%20motorcycle%20kicking%20up%20dust%20while%20riding%20on%20a%20dirt%20and%20gravel%20trail%20in%20a%20forest.%20Dynamic%20action%20shot%2C%20motion%20blur%20on%20wheels%2C%20sunny%20day.&image_size=square',
+  },
+  {
+    id: 'k7',
+    title: '摩旅车队编队骑行规范与手势',
+    desc: '结伴出行的队形排列、超车原则与常用骑行手势...',
+    content: `1. 队形排列：采用“拉链式”交错编队，不要并排行驶，保持前后足够的安全刹车距离。\n2. 领航与收尾：头车负责控制节奏和路线，尾车必须是最有经验、带工具的骑士负责收容。\n3. 超车原则：绝不盲目跟随前车超车！前车超过去不代表后车也有足够的安全空间，必须自行判断。\n4. 常用手势：左手伸出掌心向下压表示“减速”；左手伸出指向地面障碍物表示“避让”；左手伸出并食指向上画圈表示“单列行驶”。\n5. 沟通设备：建议车队配备头盔蓝牙耳机并开启Mesh组网模式，保持实时沟通。`,
+    readTime: 5,
+    icon: 'Users',
+    iconColor: 'text-emerald-500',
+    iconBg: 'bg-emerald-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20group%20of%20motorcyclists%20riding%20in%20a%20staggered%20formation%20on%20a%20scenic%20highway%20at%20sunset.%20Teamwork%2C%20brotherhood%2C%20golden%20hour%20lighting%2C%20epic%20road%20trip.&image_size=square',
+  },
+  {
+    id: 'k8',
+    title: '长途摩旅行李打包与配重指南',
+    desc: '如何科学装载行李，避免影响车辆操控与重心...',
+    content: `1. 重心法则：最重的东西（如工具、水、备用油）放在最低处和最靠近车辆中心的位置。\n2. 左右平衡：两侧边箱/边包的重量必须严格一致，否则会导致高速死亡摇摆或偏刹。\n3. 防水防尘：衣服、睡袋等必须使用防水袋或防水包（Drybag）打包，不要盲目相信箱体的防水能力。\n4. 随时取用：雨衣、水杯、急救包等高频使用的物品放在最外面或油箱包里。\n5. 紧固检查：使用弹力绑带或棘轮绑带固定，出发前和每次休息时都要检查行李是否有松动或干涉排气管。`,
+    readTime: 4,
+    icon: 'Briefcase',
+    iconColor: 'text-blue-500',
+    iconBg: 'bg-blue-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20fully%20loaded%20touring%20motorcycle%20with%20side%20panniers%20and%20a%20waterproof%20duffel%20bag%20strapped%20securely%20to%20the%20back.%20Ready%20for%20a%20long%20journey%2C%20detailed%20gear%20setup.&image_size=square',
+  },
+  {
+    id: 'k9',
+    title: '摩托车露营装备基础清单',
+    desc: '帐篷、睡袋、防潮垫的选择，以及摩旅露营的特殊要求...',
+    content: `1. 帐篷：首选收纳长度小于 50cm 的双人铝杆帐篷（单人睡更宽敞，且能放头盔装备）。\n2. 睡袋：根据目的地夜间最低温度减去 5-10 度来选择睡袋的温标，羽绒材质收纳体积最小。\n3. 防潮垫：充气防潮垫（R值大于3）不仅舒服，收纳体积也远小于蛋槽垫，是摩旅首选。\n4. 营地灯与炉具：准备轻量化气炉（如分体炉头）和高山气罐，头灯比手电更实用。\n5. 选址安全：避开河道、悬崖边缘和易落石区域；摩托车尽量停在帐篷旁边作为挡风或防范标识。`,
+    readTime: 6,
+    icon: 'Tent',
+    iconColor: 'text-teal-500',
+    iconBg: 'bg-teal-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20cozy%20campsite%20at%20dusk%20with%20a%20small%20tent%2C%20a%20glowing%20campfire%2C%20and%20a%20motorcycle%20parked%20nearby%20under%20a%20starry%20sky.%20Peaceful%20outdoor%20adventure%20vibe.&image_size=square',
+  },
+  {
+    id: 'k10',
+    title: '冬季与极寒天气骑行保暖方案',
+    desc: '三层穿衣法、电加热装备的使用以及防风御寒的核心要点...',
+    content: `1. 核心保暖：躯干的保暖最为重要，推荐采用“排汗贴身层 + 抓绒/羽绒保暖层 + 防风防水外层”的三层穿衣法。\n2. 锁住漏风口：脖子、袖口、脚踝是最容易灌风的地方，必须使用加长脖套、长筒冬季手套和高帮靴封死。\n3. 电加热装备：电加热手把是冬季神器，极寒地区可叠加使用电加热手套和电加热马甲，但需注意车辆发电机功率。\n4. 镜片防雾：冬季头盔极易起雾，除使用防雾贴片外，可微微打开一点面罩缝隙保持通风。\n5. 轮胎抓地力：冬季轮胎变硬，抓地力大幅下降。起步时需温和驾驶几公里让轮胎升温，并格外小心背阴处的暗冰。`,
+    readTime: 5,
+    icon: 'ThermometerSnowflake',
+    iconColor: 'text-cyan-500',
+    iconBg: 'bg-cyan-100',
+    image: 'https://coresg-normal.trae.ai/api/ide/v1/text_to_image?prompt=A%20motorcyclist%20riding%20through%20a%20snowy%20landscape%20in%20winter%2C%20wearing%20thick%20thermal%20riding%20gear.%20Frost%20on%20the%20helmet%20visor%2C%20cold%20atmosphere%2C%20extreme%20conditions.&image_size=square',
+  }
+]
