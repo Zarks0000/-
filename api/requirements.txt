@@ -4,5 +4,6 @@ gunicorn
 pydantic
 python-dotenv
 requests
+certifi
 httpx
 psycopg[binary]

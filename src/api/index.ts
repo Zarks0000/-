@@ -84,6 +84,7 @@ async function cloudContainerFetch(url: string, options: any = {}): Promise<any>
       },
       path: getCloudContainerPath(url),
       method: (options.method || 'GET').toUpperCase(),
+      timeout: 15000,
       header: {
         ...(options.headers || {}),
         'X-WX-SERVICE': WX_CLOUD_CONTAINER_SERVICE,

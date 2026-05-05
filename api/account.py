@@ -5,6 +5,7 @@ from typing import Any, Optional
 from uuid import uuid4
 
 import requests
+import certifi
 from flask_compat import APIRouter, Header
 from pydantic import BaseModel, Field
 
@@ -103,6 +104,22 @@ def _user_from_row(row: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def _env_bool(name: str, default: bool = True) -> bool:
+    raw = (os.getenv(name) or "").strip().lower()
+    if not raw:
+        return default
+    return raw in {"1", "true", "yes", "on"}
+
+
+def _wechat_verify_arg() -> bool | str:
+    custom_ca = (os.getenv("WECHAT_API_CA_BUNDLE") or "").strip()
+    if custom_ca:
+        return custom_ca
+    if not _env_bool("WECHAT_API_VERIFY_SSL", True):
+        return False
+    return certifi.where()
+
+
 def _exchange_code_to_wechat_session(code: str) -> dict[str, str]:
     if os.getenv("WECHAT_AUTH_MOCK") == "1":
         return {
@@ -127,17 +144,27 @@ def _exchange_code_to_wechat_session(code: str) -> dict[str, str]:
     if not appid or not secret:
         raise ValueError("后端未配置 WECHAT_APPID / WECHAT_APP_SECRET，无法完成微信 code2Session 登录")
 
-    response = requests.get(
-        "https://api.weixin.qq.com/sns/jscode2session",
-        params={
-            "appid": appid,
-            "secret": secret,
-            "js_code": code,
-            "grant_type": "authorization_code",
-        },
-        timeout=8,
-    )
-    response.raise_for_status()
+    try:
+        response = requests.get(
+            "https://api.weixin.qq.com/sns/jscode2session",
+            params={
+                "appid": appid,
+                "secret": secret,
+                "js_code": code,
+                "grant_type": "authorization_code",
+            },
+            timeout=8,
+            verify=_wechat_verify_arg(),
+        )
+        response.raise_for_status()
+    except requests.exceptions.SSLError as exc:
+        raise ValueError(
+            "微信 code2Session 证书校验失败：请重新发布云托管镜像以更新 CA 证书；"
+            "若仍失败，可临时在云托管环境变量设置 WECHAT_API_VERIFY_SSL=0 后再发布。"
+        ) from exc
+    except requests.exceptions.RequestException as exc:
+        raise ValueError(f"微信 code2Session 网络请求失败：{exc}") from exc
+
     data = response.json()
 
     errcode = data.get("errcode")
