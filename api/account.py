@@ -163,7 +163,7 @@ def _exchange_code_to_wechat_session(code: str) -> dict[str, str]:
             "若仍失败，可临时在云托管环境变量设置 WECHAT_API_VERIFY_SSL=0 后再发布。"
         ) from exc
     except requests.exceptions.RequestException as exc:
-        raise ValueError(f"微信 code2Session 网络请求失败：{exc}") from exc
+        raise ValueError("微信 code2Session 网络请求失败，请检查云托管网络和微信接口连通性") from exc
 
     data = response.json()
 
