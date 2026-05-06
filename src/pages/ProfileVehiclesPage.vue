@@ -80,6 +80,7 @@ import { onMounted, ref } from 'vue'
 import { router } from '@/utils/router'
 import Icon from '@/components/Icon.vue'
 import { api } from '@/api'
+import { useUserStore } from '@/composables/useUserStore'
 import { confirmDialog, showError, showSuccess } from '@/utils/uni'
 
 type VehicleItem = {
@@ -92,6 +93,7 @@ type VehicleItem = {
 
 
 const items = ref<VehicleItem[]>([])
+const userStore = useUserStore()
 const saving = ref(false)
 const showEditor = ref(false)
 const editingIndex = ref(-1)
@@ -133,6 +135,7 @@ const persist = async () => {
       .filter(i => i.brand && i.model)
     const res = await api.saveMyVehicles(payload)
     if (res.status !== 'success') throw new Error(res.message || '保存失败')
+    userStore.updateProfileCounts({ vehicles: Array.isArray(res.data) ? res.data.length : payload.length })
     showSuccess('保存成功')
     await load()
   } catch (e: any) {

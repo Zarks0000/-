@@ -164,6 +164,7 @@ import Icon from '@/components/Icon.vue'
 import { useUserStore } from '@/composables/useUserStore'
 import { router } from '@/utils/router'
 import { showError } from '@/utils/uni'
+import { onShow } from '@dcloudio/uni-app'
 import { onMounted, ref } from 'vue'
 
 const userStore = useUserStore()
@@ -231,6 +232,12 @@ const onLogin = async () => {
 onMounted(async () => {
   const pages = getCurrentPages()
   canGoBack.value = pages.length > 1
+  if (userStore.isLoggedIn.value) {
+    await userStore.refreshProfile()
+  }
+})
+
+onShow(async () => {
   if (userStore.isLoggedIn.value) {
     await userStore.refreshProfile()
   }

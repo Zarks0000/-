@@ -89,6 +89,14 @@ export function useUserStore() {
     }
   }
 
+  const updateProfileCounts = (counts: Partial<Pick<typeof state.userInfo, 'vehicles' | 'equipments' | 'templates'>>) => {
+    state.userInfo = {
+      ...state.userInfo,
+      ...counts
+    }
+    uni.setStorageSync('vibe_user_profile', JSON.stringify(state.userInfo))
+  }
+
   const login = async (codeInput?: string, nicknameInput?: string) => {
     const code = (codeInput || '').trim()
     if (!code) {
@@ -168,6 +176,7 @@ export function useUserStore() {
     userInfo: computed(() => state.userInfo),
     init,
     refreshProfile,
+    updateProfileCounts,
     login,
     loginWithWeChat,
     ensureLoggedIn,
