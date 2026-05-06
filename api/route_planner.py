@@ -15,6 +15,13 @@ from llm_service import ask_llm_json
 router = APIRouter()
 
 
+def _env_bool(name: str, default: bool = False) -> bool:
+    raw = (os.getenv(name) or "").strip().lower()
+    if not raw:
+        return default
+    return raw in {"1", "true", "yes", "on"}
+
+
 class Waypoint(BaseModel):
     name: str
     location: str
@@ -398,6 +405,22 @@ def _generate_route_guidance(
     )
 
     llm_result = None
+    if not _env_bool("ROUTE_PLAN_USE_LLM", False):
+        selected_titles = _select_five_titles(None, estimated_days, distance_km)
+        route_reminders = _normalize_route_reminders(None, fallback_reminders)
+        manual_todos = _build_todos_from_titles(selected_titles, existing_todos)
+        return {
+            "manual_todos": manual_todos,
+            "route_reminders": route_reminders,
+            "ai_guidance": {
+                "generated_at": datetime.now().isoformat(timespec="seconds"),
+                "llm_used": False,
+                "context": context,
+                "todo_candidates": SYSTEM_TODO_CANDIDATES,
+                "selected_todo_titles": selected_titles,
+            },
+        }
+
     system_prompt = (
         "你是专业摩托车旅行出行顾问，只输出严格 JSON。"
         f"当前行程内容：行程名={route_name}；起点城市={origin}；目的城市={destination}；"
@@ -593,39 +616,41 @@ def plan_route(request: RoutePlanRequest, http_request: Request):
 
     try:
         origin = get_geocode(request.origin)
+        if not origin:
+            raise HTTPException(status_code=400, detail="未找到起点，请换用更明确的城市或地点名称")
+        origin_lng, origin_lat = origin
+
         dest = get_geocode(request.destination)
-        if origin:
-            origin_lng, origin_lat = origin
-        if dest:
-            dest_lng, dest_lat = dest
-        if origin_lng and origin_lat and dest_lng and dest_lat:
-            wp_str = None
-            if request.waypoints:
-                wp_coords = []
-                for wp in request.waypoints:
-                    wp_geo = get_geocode(wp.location)
-                    if wp_geo:
-                        wp_coords.append(f"{wp_geo[0]},{wp_geo[1]}")
-                if wp_coords:
-                    wp_str = ";".join(wp_coords[:16])
+        if not dest:
+            raise HTTPException(status_code=400, detail="未找到终点，请换用更明确的城市或地点名称")
+        dest_lng, dest_lat = dest
 
-            route_info = get_driving_route(
-                origin_lng, origin_lat, dest_lng, dest_lat, waypoints=wp_str
-            )
-            if route_info:
-                base_distance = route_info["distance"] / 1000.0
-                total_duration = route_info["duration"]
-                polyline = route_info.get("polyline")
-    except Exception:
-        pass
+        wp_str = None
+        if request.waypoints:
+            wp_coords = []
+            for wp in request.waypoints:
+                wp_geo = get_geocode(wp.location)
+                if not wp_geo:
+                    raise HTTPException(status_code=400, detail=f"未找到途经点：{wp.location}")
+                wp_coords.append(f"{wp_geo[0]},{wp_geo[1]}")
+            if wp_coords:
+                wp_str = ";".join(wp_coords[:16])
 
-    if base_distance <= 0:
-        if "拉萨" in request.destination or "西藏" in request.destination:
-            base_distance = 2100
-        elif "北京" in request.origin and "怀柔" in request.destination:
-            base_distance = 85
-        else:
-            base_distance = 500
+        route_info = get_driving_route(
+            origin_lng, origin_lat, dest_lng, dest_lat, waypoints=wp_str
+        )
+        if not route_info:
+            raise HTTPException(status_code=502, detail="路线查询失败，请稍后重试或调整起终点")
+
+        base_distance = route_info["distance"] / 1000.0
+        total_duration = route_info["duration"]
+        polyline = route_info.get("polyline")
+    except HTTPException:
+        raise
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=502, detail="路线服务暂不可用，请稍后重试") from exc
 
     daily_km = 300
     if request.riding_style == "aggressive":

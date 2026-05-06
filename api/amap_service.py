@@ -14,6 +14,16 @@ def _amap_key() -> str:
     return key
 
 
+def _env_float(name: str, default: float) -> float:
+    raw = (os.getenv(name) or "").strip()
+    if not raw:
+        return default
+    try:
+        return float(raw)
+    except ValueError:
+        return default
+
+
 def get_geocode(address: str) -> Optional[tuple[str, str]]:
     address = (address or "").strip()
     if not address:
@@ -22,7 +32,7 @@ def get_geocode(address: str) -> Optional[tuple[str, str]]:
     resp = requests.get(
         "https://restapi.amap.com/v3/geocode/geo",
         params={"address": address, "key": _amap_key()},
-        timeout=10,
+        timeout=_env_float("AMAP_GEOCODE_TIMEOUT", 4),
     )
     resp.raise_for_status()
     data = resp.json()
@@ -60,7 +70,7 @@ def get_driving_route(origin_lng: str, origin_lat: str, dest_lng: str, dest_lat:
     resp = requests.get(
         "https://restapi.amap.com/v3/direction/driving",
         params=params,
-        timeout=15,
+        timeout=_env_float("AMAP_ROUTE_TIMEOUT", 6),
     )
     resp.raise_for_status()
     data = resp.json()

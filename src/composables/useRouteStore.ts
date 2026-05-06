@@ -328,8 +328,10 @@ export function useRouteStore() {
       state.routes.unshift(newRoute)
       state.selectedHomeRouteId = newRoute.id
       
-      // 创建后，刷新预警与建议
-      await fetchAlertsAndSuggestions(newRoute)
+      // 创建完成后立即返回，让创建弹窗先关闭；天气、禁摩、新闻和建议在后台加载。
+      fetchAlertsAndSuggestions(newRoute).catch((error) => {
+        console.error('Failed to fetch alerts after route creation:', error)
+      })
       
       return newRoute
       
