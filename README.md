@@ -10,6 +10,7 @@
 
 <p align="center">
   <img alt="Version" src="https://img.shields.io/badge/开发版-1.0.0-16a34a" />
+  <img alt="Vibe Coding" src="https://img.shields.io/badge/纯%20Vibe%20Coding-项目-ff7a18" />
   <img alt="UniApp" src="https://img.shields.io/badge/UniApp-Vue%203-2f80ed" />
   <img alt="Backend" src="https://img.shields.io/badge/Backend-Flask-111827" />
   <img alt="Database" src="https://img.shields.io/badge/Database-Supabase%20PostgreSQL-3fcf8e" />
@@ -22,11 +23,13 @@
 
 你可以用它创建摩旅行程、查看分日路书、管理出行待办、登记车辆与装备，也可以查询天气、禁摩、预算和装备清单。后端基于 Flask，数据库使用 Supabase PostgreSQL，并已适配微信云托管部署。
 
+> 这是一个**纯 Vibe Coding 项目**：从产品想法、功能迭代、界面调整、后端接口、部署适配到文档整理，均围绕真实需求边做边改，快速把小程序从想法推进到可运行版本。
+
 ## 📱 页面预览
 
 | 首页 | 行程 | 发现 | 我的 |
 | --- | --- | --- | --- |
-| <img src="./docs/images/home.svg" width="220" alt="首页预览" /> | <img src="./docs/images/routes.svg" width="220" alt="行程页预览" /> | <img src="./docs/images/explore.svg" width="220" alt="发现页预览" /> | <img src="./docs/images/profile.svg" width="220" alt="我的页预览" /> |
+| <img src="./docs/images/home.jpg" width="220" alt="首页真机截图" /> | <img src="./docs/images/routes.jpg" width="220" alt="行程页真机截图" /> | <img src="./docs/images/explore.jpg" width="220" alt="发现页真机截图" /> | <img src="./docs/images/profile.jpg" width="220" alt="我的页真机截图" /> |
 | 当前主行程、准备进度、提醒和建议集中展示。 | 管理筹备中、进行中、已完成的全部行程。 | 放路线模板、知识内容和常用摩旅工具。 | 车辆、装备、模板、隐私、反馈和关于信息入口。 |
 
 ## ✨ 核心功能
