@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page flex flex-col relative">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 flex flex-col relative">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -9,7 +9,7 @@
     </header>
 
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-8 space-y-5">
-      <div class="app-card rounded-2xl p-4">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <label class="block text-sm font-medium text-slate-700 mb-2">输入查询城市</label>
         <div class="flex space-x-2">
           <input 
@@ -30,7 +30,7 @@
         </div>
       </div>
 
-      <div v-if="result" class="app-card rounded-2xl p-4">
+      <div v-if="result" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <div class="flex items-center mb-3">
           <Icon name="shield-alert" size="40rpx" class="mr-2 shrink-0" />
           <h3 class="font-bold text-slate-800">{{ city }} 禁摩政策</h3>     
@@ -71,4 +71,3 @@ const search = async () => {
   }
 }
 </script>
-

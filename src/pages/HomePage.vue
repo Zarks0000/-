@@ -1,22 +1,13 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col">
+  <div class="h-full bg-slate-50 relative flex flex-col">
     <!-- 1. 顶部状态栏 & 导航 -->
-    <header class="app-safe-header app-hero-header h-24 pt-10 px-4 flex items-center text-white sticky top-0 z-50 shrink-0">
+    <header class="app-safe-header bg-gradient-to-br from-[#0f172a] to-[#064e3b] h-24 pt-10 px-4 flex items-center text-white sticky top-0 z-50 shrink-0">
       <div class="flex items-center">
         <button v-if="canGoBack" @click="router.back()" class="w-8 h-8 flex items-center justify-center bg-white/10 rounded-full hover:bg-white/20 transition-colors mr-2">
           <Icon name="chevron-left" size="40rpx" class="brightness-0 invert" />
         </button>
-        <div class="w-11 h-11 mr-3 bg-white text-[#064e3b] rounded-2xl flex items-center justify-center shadow-[4rpx_4rpx_0_rgba(0,0,0,0.18)]">
-          <Icon name="bike" size="44rpx" />
-        </div>
-        <div>
-          <span class="text-lg font-black tracking-wider">摩旅客</span>
-          <div class="mt-0.5 flex items-center gap-1">
-            <span class="w-2 h-2 rounded-full bg-white/80"></span>
-            <span class="w-2 h-2 bg-white/45"></span>
-            <span class="w-0 h-0 border-l-[4px] border-r-[4px] border-b-[8px] border-l-transparent border-r-transparent border-b-white"></span>
-          </div>
-        </div>
+        <Icon name="bike" size="48rpx" class="brightness-0 invert mr-3" />
+        <span class="text-lg font-bold tracking-wider">摩旅工具</span>
       </div>
     </header>
 
@@ -26,7 +17,7 @@
       <section class="px-4 mt-4">
         <div v-if="store.homeRouteCandidates.value.length > 1" class="relative mb-3">
           <button
-            class="m-0 w-full app-card rounded-2xl px-4 py-3 flex items-center justify-between active:bg-[#fbfaf7] transition-colors"
+            class="m-0 w-full bg-white border border-slate-100 shadow-sm rounded-xl px-4 py-3 flex items-center justify-between active:bg-slate-50 transition-colors"
             @click="isRouteSwitcherOpen = !isRouteSwitcherOpen"
           >
             <div class="flex items-center min-w-0">
@@ -42,7 +33,7 @@
             </div>
           </button>
 
-          <div v-if="isRouteSwitcherOpen" class="mt-2 app-card rounded-2xl overflow-hidden">
+          <div v-if="isRouteSwitcherOpen" class="mt-2 bg-white rounded-xl border border-slate-100 shadow-sm overflow-hidden">
             <button
               v-for="route in store.homeRouteCandidates.value"
               :key="route.id"
@@ -64,7 +55,7 @@
         <template v-if="homeRoute">
           <div 
             @click="router.push(`/route/${homeRoute.id}`)"
-            class="block bg-[#064e3b] h-[284px] rounded-[28rpx] relative overflow-hidden p-5 flex flex-col justify-between text-white shadow-[10rpx_10rpx_0_rgba(18,24,21,0.14)] active:opacity-90"
+            class="block bg-gradient-to-br from-[#0f172a] to-[#064e3b] h-[284px] rounded-2xl relative overflow-hidden p-5 flex flex-col justify-between text-white shadow-lg shadow-emerald-900/20 active:opacity-90"
           >
             <!-- 背景装饰：山脉线条 -->
             <div class="absolute inset-0 opacity-10 pointer-events-none">
@@ -72,8 +63,6 @@
                 <path d="M0 250 L100 150 L200 220 L300 100 L400 200 L400 300 L0 300 Z" fill="currentColor"></path>
               </svg>
             </div>
-            <div class="absolute right-[-36rpx] top-[-32rpx] w-32 h-32 rounded-full bg-white/10 pointer-events-none"></div>
-            <div class="absolute right-16 bottom-20 w-16 h-16 bg-white/10 rotate-45 pointer-events-none"></div>
             
             <div class="relative z-10">
               <div class="flex justify-between items-start">
@@ -83,7 +72,7 @@
                     {{ homeRoute.startDate === homeRoute.endDate ? homeRoute.startDate : `${homeRoute.startDate} - ${homeRoute.endDate}` }}
                   </p>
                 </div>
-                <div class="bg-white/90 text-[#064e3b] px-3 py-1 rounded-full text-xs font-black shadow-[3rpx_3rpx_0_rgba(0,0,0,0.12)]">
+                <div class="bg-yellow-500/90 text-slate-900 px-3 py-1 rounded-full text-xs font-bold">
                   {{ homeRoute.status === '已完成' ? '已完成' : homeRoute.status === '进行中' ? '进行中' : homeRoute.daysLeft > 0 ? `倒计时 ${homeRoute.daysLeft} 天` : '今天出发' }}
                 </div>
               </div>
@@ -94,8 +83,8 @@
                   <span class="text-sm font-medium">目的地：{{ homeRoute.destination }}</span>
                 </div>
                 
-                <div class="w-full bg-white/20 h-2 rounded-full overflow-hidden border border-white/20">
-                  <div class="bg-white h-full transition-all duration-500" :style="{ width: `${homeRoute.progress}%` }"></div>
+                <div class="w-full bg-white/20 h-1.5 rounded-full overflow-hidden">
+                  <div class="bg-yellow-400 h-full transition-all duration-500" :style="{ width: `${homeRoute.progress}%` }"></div>
                 </div>
                 
                 <div class="flex justify-between text-[10px] mt-2 text-slate-300">
@@ -106,7 +95,7 @@
               </div>
             </div>
             
-            <div class="relative z-10 w-full bg-white text-slate-900 py-3 rounded-2xl font-black flex items-center justify-center space-x-2 shadow-[4rpx_4rpx_0_rgba(0,0,0,0.18)]">
+            <div class="relative z-10 w-full bg-white text-slate-900 py-3 rounded-xl font-bold flex items-center justify-center space-x-2">
               <span>{{ homeRoute.status === '已完成' || homeRoute.progress >= 100 ? '查看行程详情' : '继续完善准备' }}</span>
               <Icon name="chevron-right" size="24rpx" />
             </div>
@@ -114,13 +103,13 @@
         </template>
         
         <!-- 无主行程时的引导卡片 -->
-        <div v-else class="app-card-strong border-2 border-dashed border-[#d8cdbd] h-[284px] rounded-[28rpx] p-5 flex flex-col items-center justify-center text-slate-400">
+        <div v-else class="bg-white border-2 border-dashed border-slate-200 h-[284px] rounded-2xl p-5 flex flex-col items-center justify-center text-slate-400">
           <Icon name="bike" size="96rpx" />
           <h2 class="text-lg font-bold text-slate-700 mb-2">开启新的旅程</h2>
           <p class="text-xs mb-6">创建一个新行程，系统将为你提供智能准备建议</p>
           <button 
             @click="isCreateModalOpen = true"
-            class="app-action-button app-primary-button px-6 py-2.5 rounded-full text-sm font-bold"
+            class="app-action-button bg-[#064e3b] text-white px-6 py-2.5 rounded-full text-sm font-medium shadow-md active:scale-95 transition-transform"
           >
             创建第一个行程
           </button>
@@ -130,8 +119,8 @@
       <!-- 3. 关键提醒区 (仅有主行程时显示) -->
       <section v-if="homeRoute" class="mt-6 px-4">
         <div class="flex justify-between items-center mb-3">
-          <h3 class="app-section-heading">给你的出行提醒</h3>
-          <div @click="router.push('/suggestions')" class="app-link text-xs flex items-center shrink-0 ml-3 whitespace-nowrap">
+          <h3 class="font-bold text-slate-800">给你的出行提醒</h3>
+          <div @click="router.push('/suggestions')" class="text-xs text-slate-400 flex items-center shrink-0 ml-3 whitespace-nowrap">
             全部出行提醒 <Icon name="chevron-right" size="24rpx" />
           </div>
         </div>
@@ -140,31 +129,29 @@
             <div 
               v-for="(alert, index) in homeAlerts" 
               :key="index"
-              class="p-3 rounded-2xl flex items-start gap-3 border-l-4 app-card"
+              class="p-3 rounded-r-xl flex space-x-3 items-start border-l-4"
               :class="{
                 'bg-red-50 border-red-500': alert.severity === 'high' || alert.level === 'high',
-                'bg-emerald-50 border-emerald-500': alert.severity === 'medium' || alert.level === 'medium',
+                'bg-orange-50 border-orange-400': alert.severity === 'medium' || alert.level === 'medium',
                 'bg-blue-50 border-blue-500': alert.severity === 'low' || alert.level === 'low',
                 'bg-slate-50 border-slate-400': !alert.severity && !alert.level
               }"
             >
-              <Icon v-if="alert.severity === 'high' || alert.level === 'high'" name="alert-triangle" size="40rpx" class="shrink-0 mt-0.5" />
-              <Icon v-else-if="alert.type === 'weather'" name="cloud-snow" size="40rpx" class="shrink-0 mt-0.5" />
-              <Icon v-else-if="alert.type === 'news'" name="book-open" size="40rpx" class="shrink-0 mt-0.5" />
-              <Icon v-else name="wrench" size="40rpx" class="shrink-0 mt-0.5" />
+              <Icon v-if="alert.severity === 'high' || alert.level === 'high'" name="alert-triangle" size="40rpx" />
+              <Icon v-else-if="alert.type === 'weather'" name="cloud-snow" size="40rpx" />
+              <Icon v-else name="wrench" size="40rpx" />
               
-              <div class="min-w-0 flex-1 text-xs leading-relaxed" :class="{
+              <div class="text-xs leading-relaxed" :class="{
                 'text-red-900': alert.severity === 'high' || alert.level === 'high',
-                'text-emerald-900': alert.severity === 'medium' || alert.level === 'medium',
+                'text-orange-900': alert.severity === 'medium' || alert.level === 'medium',
                 'text-blue-900': alert.severity === 'low' || alert.level === 'low',
                 'text-slate-900': !alert.severity && !alert.level
               }">
-                <div class="font-bold truncate">{{ alert.title || '出行提醒' }}</div>
-                <div class="mt-1">{{ alert.description || '暂无详细说明' }}</div>
+                <span class="font-bold">{{ alert.title }}</span> {{ alert.description }}
               </div>
             </div>
           </template>
-          <div v-else class="text-center text-xs text-slate-400 py-4 app-card rounded-2xl">
+          <div v-else class="text-center text-xs text-slate-400 py-4 bg-white rounded-xl border border-slate-100">
             暂无特殊出行预警
           </div>
         </div>
@@ -173,12 +160,12 @@
       <!-- 4. 建议完成区 (仅有主行程时显示) -->
       <section v-if="homeRoute" class="mt-6 px-4">
         <div class="flex justify-between items-center mb-3">
-          <h3 class="app-section-heading">建议完成</h3>
-          <button class="app-action-button ml-auto m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs text-[#064e3b] flex items-center justify-end font-bold" @click="toggleManualTodoInput">
+          <h3 class="font-bold text-slate-800">建议完成</h3>
+          <button class="app-action-button ml-auto m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs text-[#064e3b] flex items-center justify-end font-medium" @click="toggleManualTodoInput">
             <Icon name="plus" size="24rpx" class="mr-1 shrink-0" /> 添加事项
           </button>
         </div>
-        <div v-if="isAddingManualTodo" class="mb-3 app-card rounded-2xl p-3">
+        <div v-if="isAddingManualTodo" class="mb-3 bg-white rounded-2xl shadow-sm border border-slate-100 p-3">
           <div class="flex items-center space-x-2">
             <input
               v-model="newManualTodoTitle"
@@ -204,7 +191,7 @@
             </button>
           </div>
         </div>
-        <div class="app-card rounded-2xl divide-y divide-[#f0ebe0] overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 divide-y divide-slate-50">
           <template v-if="store.suggestionTasks.value.length > 0">
             <div 
               v-for="task in store.suggestionTasks.value" 
@@ -259,14 +246,14 @@
       <!-- 5. 其他内容区 (仅当有其他行程时显示) -->
       <section v-if="store.otherRoutes.value.length > 0" class="mt-6">
         <div class="px-4 flex justify-between items-center mb-3">
-          <h3 class="app-section-heading">我的其他行程</h3>
+          <h3 class="font-bold text-slate-800">我的其他行程</h3>
         </div>
         <div class="flex space-x-4 overflow-x-auto hide-scrollbar px-4 pb-4">
           <div
             v-for="route in store.otherRoutes.value"
             :key="route.id"
             @click="router.push(`/route/${route.id}`)"
-            class="shrink-0 w-64 h-32 app-card rounded-2xl p-4 flex flex-col justify-between cursor-pointer active:scale-[0.98] transition-transform"
+            class="shrink-0 w-64 h-32 bg-white border border-slate-100 rounded-2xl p-4 flex flex-col justify-between shadow-sm cursor-pointer active:scale-[0.98] transition-transform"
           >
             <div>
               <span class="text-[10px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded-full">{{ route.origin }} - {{ route.destination }}</span>
@@ -365,7 +352,7 @@ onPullDownRefresh(async () => {
 
 onShareAppMessage(() => {
   return {
-    title: '摩旅客 - 智能摩旅出行规划',
+    title: '摩旅工具 - 智能摩旅出行规划',
     path: '/pages/HomePage'
   }
 })
@@ -424,4 +411,3 @@ const removeManualTodo = async (todoId: string) => {
   await store.saveManualTodos(route.id, nextTodos)
 }
 </script>
-

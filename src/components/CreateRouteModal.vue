@@ -4,13 +4,10 @@
     <div class="absolute inset-0 bg-black/40 transition-opacity" @click="close"></div>
     
     <!-- 模态框主体 -->
-    <div class="relative bg-white w-full rounded-t-[32rpx] shadow-2xl overflow-hidden transform transition-transform duration-300 border-t-2 border-[#e4ded2]">
+    <div class="relative bg-white w-full rounded-t-3xl shadow-2xl overflow-hidden transform transition-transform duration-300">
       <div class="p-6 max-h-[82vh] overflow-y-auto hide-scrollbar">
         <div class="flex justify-between items-center mb-6">
-          <div>
-            <h2 class="text-xl font-black text-slate-900">新建行程</h2>
-            <div class="text-[10px] text-slate-500 mt-0.5">输入起终点，生成可编辑路书</div>
-          </div>
+          <h2 class="text-xl font-bold text-slate-800">新建行程</h2>
           <button @click="close" class="route-close-button w-10 h-10 m-0 p-0 bg-slate-50 border border-slate-100 rounded-full shadow-none text-slate-500 flex items-center justify-center leading-none">
             <Icon name="x" size="32rpx" />
           </button>
@@ -26,7 +23,7 @@
               required
               placeholder-class="route-input-placeholder"
               placeholder="给这次摩旅起个响亮的名字" 
-              class="route-input app-input w-full h-10 px-4 py-0 text-sm leading-10 focus:outline-none"
+              class="route-input w-full h-10 bg-slate-50 border border-slate-200 rounded-xl px-4 py-0 text-sm leading-10 text-slate-700 focus:outline-none focus:border-[#064e3b] focus:ring-1 focus:ring-[#064e3b]/20"
             >
           </div>
 
@@ -42,7 +39,7 @@
                 required
                 placeholder-class="route-input-placeholder"
                 placeholder="出发城市" 
-                class="route-input app-input w-full h-10 px-4 py-0 text-sm leading-10 focus:outline-none"
+                class="route-input w-full h-10 bg-slate-50 border border-slate-200 rounded-xl px-4 py-0 text-sm leading-10 text-slate-700 focus:outline-none focus:border-[#064e3b] focus:ring-1 focus:ring-[#064e3b]/20"
               >
             </div>
             <Icon name="arrow-right" size="32rpx" class="shrink-0 mt-5" />
@@ -54,7 +51,7 @@
                 required
                 placeholder-class="route-input-placeholder"
                 placeholder="目的城市" 
-                class="route-input app-input w-full h-10 px-4 py-0 text-sm leading-10 focus:outline-none"
+                class="route-input w-full h-10 bg-slate-50 border border-slate-200 rounded-xl px-4 py-0 text-sm leading-10 text-slate-700 focus:outline-none focus:border-[#064e3b] focus:ring-1 focus:ring-[#064e3b]/20"
               >
             </div>
           </div>
@@ -70,7 +67,7 @@
               @change="onStartDateChange"
             >
               <view
-                class="route-input app-input w-full h-10 px-4 py-0 text-sm leading-10 flex items-center justify-between"
+                class="route-input w-full h-10 bg-slate-50 border border-slate-200 rounded-xl px-4 py-0 text-sm leading-10 flex items-center justify-between"
                 :class="form.startDate ? 'text-slate-700' : 'text-slate-400'"
               >
                 <text>{{ form.startDate || '请选择出发日期' }}</text>
@@ -87,7 +84,7 @@
               type="text" 
               placeholder-class="route-input-placeholder"
               placeholder="例如: 郑州,洛阳" 
-              class="route-input app-input w-full h-10 px-4 py-0 text-sm leading-10 focus:outline-none"
+              class="route-input w-full h-10 bg-slate-50 border border-slate-200 rounded-xl px-4 py-0 text-sm leading-10 text-slate-700 focus:outline-none focus:border-[#064e3b] focus:ring-1 focus:ring-[#064e3b]/20"
             >
           </div>
 
@@ -95,7 +92,7 @@
             type="button"
             @click="submitForm"
             :disabled="store.isLoading.value"
-            class="route-submit-button app-primary-button w-[80%] mx-auto mt-6 text-white text-sm font-bold h-11 rounded-2xl disabled:opacity-50 flex justify-center items-center"
+            class="route-submit-button w-[80%] mx-auto mt-6 bg-[#064e3b] text-white text-sm font-bold h-11 rounded-xl shadow-md shadow-[#064e3b]/20 active:scale-[0.98] transition-transform disabled:opacity-50 flex justify-center items-center"
           >
             <span v-if="store.isLoading.value" class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
             {{ store.isLoading.value ? '正在智能规划中...' : '开始筹备' }}
@@ -122,8 +119,6 @@ const store = useRouteStore()
 type PresetScheduleItem = {
   day?: number
   title?: string
-  start_location?: string
-  end_location?: string
   start_time?: string
   end_time?: string
   distance_km?: number
@@ -176,8 +171,6 @@ const cloneSchedule = (schedule?: PresetScheduleItem[]) => {
     ? schedule.map((item, idx) => ({
         day: idx + 1,
         title: item.title || '',
-        start_location: item.start_location || '',
-        end_location: item.end_location || '',
         start_time: item.start_time || '09:00',
         end_time: item.end_time || '17:00',
         distance_km: Number(item.distance_km || 0),

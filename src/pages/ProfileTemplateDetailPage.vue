@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col pb-20">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 relative flex flex-col pb-20">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -9,7 +9,7 @@
     </header>
 
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 space-y-4" v-if="data">
-      <section class="app-card rounded-2xl p-4">
+      <section class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
         <div class="flex items-start gap-3">
           <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
             <Icon name="file-text" size="40rpx" />
@@ -37,7 +37,7 @@
           <span>分日路书参考</span>
         </h3>
         <div class="space-y-3">
-          <div v-for="day in data.schedule" :key="day.day" class="app-card rounded-2xl p-4">
+          <div v-for="day in data.schedule" :key="day.day" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex justify-between items-center mb-2">
               <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-xs font-bold">Day {{ day.day }}</span>
               <span class="text-xs text-slate-400 font-medium">约 {{ day.distance_km }} km</span>
@@ -141,4 +141,3 @@ const applyTemplate = () => {
 
 onMounted(load)
 </script>
-

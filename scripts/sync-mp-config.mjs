@@ -56,7 +56,7 @@ const baseConfig = {
   compileType: 'miniprogram',
   libVersion: '3.15.2',
   appid: wechatAppId,
-  projectname: '摩旅客',
+  projectname: '摩旅工具',
   condition: {},
   editorSetting: {
     tabIndent: 'insertSpaces',
@@ -65,7 +65,7 @@ const baseConfig = {
 }
 
 const privateConfig = {
-  projectname: 'mp-weixin',
+  projectname: '摩旅工具',
   setting: {
     urlCheck: false,
     coverView: false,

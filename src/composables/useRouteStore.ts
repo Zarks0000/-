@@ -84,93 +84,6 @@ const normalizeRouteReminders = (raw: any): RouteReminder[] => {
     .filter(item => item.title && item.description)
 }
 
-const toRouteDateParam = (dateText?: string) => {
-  if (!dateText || dateText === '—') return undefined
-  const normalized = dateText.replace(/\./g, '-')
-  return /^\d{4}-\d{2}-\d{2}$/.test(normalized) ? normalized : undefined
-}
-
-const routeWaypointNames = (route: Route) => {
-  const genericTitle = /^(第\s*\d+\s*天骑行|Day\s*\d+)$/i
-  const names = new Set<string>()
-  ;(route.schedule || []).forEach((item: any) => {
-    ;['city', 'location', 'start_location', 'end_location', 'from', 'to', 'destination', 'stop', 'stay'].forEach((key) => {
-      const value = String(item?.[key] || '').trim()
-      if (value && value !== route.origin && value !== route.destination) names.add(value)
-    })
-    const title = String(item?.title || '').trim()
-    if (title && !genericTitle.test(title) && title.length <= 20) names.add(title)
-  })
-  return Array.from(names).slice(0, 6)
-}
-
-const buildWeatherReminders = (weatherRes: any, route: Route, dateParam?: string): RouteReminder[] => {
-  const reminders: RouteReminder[] = []
-  const weather = weatherRes?.weather
-
-  if (weather?.type === 'forecast') {
-    const temp = weather.tempMin && weather.tempMax ? `${weather.tempMin}-${weather.tempMax}℃` : ''
-    const wind = [weather.windDir, weather.windScale ? `${weather.windScale}级` : ''].filter(Boolean).join('')
-    const extras = [
-      weather.precip ? `降水量 ${weather.precip}mm` : '',
-      weather.vis ? `能见度 ${weather.vis}km` : '',
-    ].filter(Boolean)
-    reminders.push({
-      id: `weather-${route.id}-${weather.date || dateParam || 'forecast'}`,
-      type: 'weather',
-      severity: 'low',
-      level: 'low',
-      title: `【天气】${route.destination}${weather.date ? ` ${weather.date}` : ''}`,
-      description: [`预计${weather.text || '天气待确认'}`, temp, wind, ...extras].filter(Boolean).join('，'),
-      source: '和风天气',
-    })
-  } else if (weather?.type === 'now') {
-    const wind = [weather.windDir, weather.windScale ? `${weather.windScale}级` : ''].filter(Boolean).join('')
-    reminders.push({
-      id: `weather-${route.id}-now`,
-      type: 'weather',
-      severity: 'low',
-      level: 'low',
-      title: `【天气】${route.destination}当前天气`,
-      description: [
-        weather.text || '天气待确认',
-        weather.temp ? `${weather.temp}℃` : '',
-        weather.feelsLike ? `体感 ${weather.feelsLike}℃` : '',
-        wind,
-        weather.humidity ? `湿度 ${weather.humidity}%` : '',
-      ].filter(Boolean).join('，'),
-      source: '和风天气',
-    })
-  } else if (weatherRes?.message) {
-    reminders.push({
-      id: `weather-${route.id}-message`,
-      type: 'weather',
-      severity: 'low',
-      level: 'low',
-      title: `【天气】${route.destination}天气查询`,
-      description: String(weatherRes.message),
-      source: '和风天气',
-    })
-  }
-
-  return reminders
-}
-
-const buildNewsReminders = (newsRes: any, route: Route): RouteReminder[] => {
-  const newsAlerts = Array.isArray(newsRes?.alerts) ? newsRes.alerts : []
-  if (newsAlerts.length > 0) return newsAlerts
-
-  return [{
-    id: `news-${route.id}-empty`,
-    type: 'news',
-    severity: 'low',
-    level: 'low',
-    title: '【新闻】沿途资讯',
-    description: `暂未获取到与 ${route.origin} 到 ${route.destination} 相关的新闻提醒，出发前建议再次确认沿途交通、天气和临时管制信息。`,
-    source: '新闻检索',
-  }]
-}
-
 export function useRouteStore() {
   const routes = computed(() => state.routes)
   const isLoading = computed(() => state.isLoading)
@@ -315,13 +228,10 @@ export function useRouteStore() {
         }
       }
 
-      const dateParam = toRouteDateParam(route.startDate)
-      const waypoints = routeWaypointNames(route)
-
       const [weatherRes, restrictionRes, newsRes, suggestionRes] = await Promise.all([
-        api.getWeatherAlerts(route.destination, dateParam),
+        api.getWeatherAlerts(route.destination),
         api.getRestriction(route.destination),
-        api.getNewsAlertsForRoute({ origin: route.origin, destination: route.destination, waypoints }, 6),
+        api.getNewsAlertsForRoute({ origin: route.origin, destination: route.destination }, 6),
         api.getSuggestions(
           route.destination,
           route.daysLeft || 1,
@@ -330,15 +240,11 @@ export function useRouteStore() {
         )
       ])
 
-      const weatherReminders = buildWeatherReminders(weatherRes, route, dateParam)
-      const newsReminders = buildNewsReminders(newsRes, route)
-
       state.currentAlerts = [
-        ...weatherReminders,
+        ...persistedReminders,
         ...(weatherRes.alerts || []),
         ...(restrictionRes.data?.is_restricted ? [restrictionRes.data] : []),
-        ...newsReminders,
-        ...persistedReminders
+        ...((newsRes && newsRes.alerts) || [])
       ]
 
       state.currentSuggestions = suggestionRes.data?.suggestions || []

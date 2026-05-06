@@ -12,7 +12,7 @@
   "compileType": "miniprogram",
   "libVersion": "3.15.2",
   "appid": "touristappid",
-  "projectname": "摩旅客",
+  "projectname": "摩旅工具",
   "condition": {},
   "miniprogramRoot": "./"
 }

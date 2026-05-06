@@ -34,7 +34,7 @@ function showRequiredLoginModal(): Promise<void> {
   return new Promise((resolve) => {
     uni.showModal({
       title: '微信授权登录',
-      content: '登录后才能使用摩旅客的行程规划、工具查询和个人数据功能。',
+      content: '登录后才能使用摩旅工具的行程规划、工具查询和个人数据功能。',
       showCancel: false,
       confirmText: '微信登录',
       success: () => resolve(),

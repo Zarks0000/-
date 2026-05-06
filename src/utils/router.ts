@@ -10,8 +10,6 @@ const tabBarPages = [
   '/pages/ProfilePage',
 ]
 
-const authPage = '/pages/AuthPage'
-
 type RouteMatcher = {
   pattern: RegExp
   toUrl: (...matches: string[]) => string
@@ -19,7 +17,6 @@ type RouteMatcher = {
 
 const legacyRoutes: RouteMatcher[] = [
   { pattern: /^\/$/, toUrl: () => '/pages/HomePage' },
-  { pattern: /^\/auth$/, toUrl: () => '/pages/AuthPage' },
   { pattern: /^\/home$/, toUrl: () => '/pages/HomePage' },
   { pattern: /^\/route$/, toUrl: () => '/pages/RoutePage' },
   { pattern: /^\/route\/([^/?#]+)$/, toUrl: (id) => `/pages/RouteDetailPage?id=${encodeURIComponent(id)}` },
@@ -69,24 +66,9 @@ function isTabBarUrl(url: string) {
   return tabBarPages.some(page => url === page || url.startsWith(`${page}?`))
 }
 
-function hasAuthToken() {
-  return Boolean(uni.getStorageSync('vibe_auth_token'))
-}
-
-function shouldRequireAuth(url: string) {
-  return !(url === authPage || url.startsWith(`${authPage}?`))
-}
-
-function redirectToAuthIfNeeded(url: string) {
-  if (!shouldRequireAuth(url) || hasAuthToken()) return false
-  uni.reLaunch({ url: authPage })
-  return true
-}
-
 export const router = {
   push(path: string) {
     const url = normalizePath(path)
-    if (redirectToAuthIfNeeded(url)) return
     // H5 预览阶段先关闭 tabBar 依赖，统一走普通页面导航。
     // #ifdef H5
     uni.navigateTo({ url })
@@ -100,7 +82,6 @@ export const router = {
   },
   replace(path: string) {
     const url = normalizePath(path)
-    if (redirectToAuthIfNeeded(url)) return
     // #ifdef H5
     uni.redirectTo({ url })
     return

@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col pb-6">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 relative flex flex-col pb-6">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -13,11 +13,11 @@
         v-for="(item, idx) in items"
         :key="item.id"
         @click="openEdit(idx)"
-        class="app-card rounded-2xl p-4 cursor-pointer active:scale-[0.98] transition-transform"
+        class="bg-white rounded-2xl border border-slate-100 shadow-sm p-4 cursor-pointer active:scale-[0.98] transition-transform"
       >
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-3 min-w-0">
-            <div class="w-10 h-10 rounded-lg bg-slate-50 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-lg bg-orange-50 flex items-center justify-center">
               <Icon name="briefcase" size="40rpx" />
             </div>
             <div class="min-w-0">
@@ -177,4 +177,3 @@ textarea.input {
   padding-bottom: 20rpx;
 }
 </style>
-

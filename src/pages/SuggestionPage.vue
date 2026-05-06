@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page flex flex-col relative">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 flex flex-col relative">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -21,10 +21,10 @@
         <div
           v-for="(alert, index) in store.alerts.value"
           :key="alert.id || index"
-          class="p-4 rounded-r-xl flex items-start gap-3 border-l-4 shadow-sm"
+          class="p-4 rounded-r-xl flex space-x-3 items-start border-l-4 shadow-sm"
           :class="alertToneClass(alert)"
         >
-          <Icon :name="alertIconName(alert)" size="40rpx" class="shrink-0 mt-0.5" />
+          <Icon :name="alertIconName(alert)" size="40rpx" />
           <div class="flex-1 min-w-0">
             <div class="flex items-center justify-between gap-2">
               <h2 class="text-sm font-bold truncate" :class="alertTextClass(alert)">
@@ -64,7 +64,7 @@ const alertLevel = (alert: any) => alert?.severity || alert?.level || 'normal'
 const alertToneClass = (alert: any) => {
   const level = alertLevel(alert)
   if (level === 'high') return 'bg-red-50 border-red-500'
-  if (level === 'medium') return 'bg-emerald-50 border-emerald-500'
+  if (level === 'medium') return 'bg-orange-50 border-orange-400'
   if (level === 'low') return 'bg-blue-50 border-blue-500'
   return 'bg-slate-50 border-slate-400'
 }
@@ -72,7 +72,7 @@ const alertToneClass = (alert: any) => {
 const alertTextClass = (alert: any) => {
   const level = alertLevel(alert)
   if (level === 'high') return 'text-red-900'
-  if (level === 'medium') return 'text-emerald-900'
+  if (level === 'medium') return 'text-orange-900'
   if (level === 'low') return 'text-blue-900'
   return 'text-slate-900'
 }
@@ -80,7 +80,6 @@ const alertTextClass = (alert: any) => {
 const alertIconName = (alert: any) => {
   if (alertLevel(alert) === 'high') return 'alert-triangle'
   if (alert?.type === 'weather') return 'cloud-snow'
-  if (alert?.type === 'news') return 'book-open'
   if (alert?.type === 'restriction') return 'shield-alert'
   return 'wrench'
 }
@@ -102,4 +101,3 @@ const refreshAlerts = async () => {
 
 onShow(refreshAlerts)
 </script>
-

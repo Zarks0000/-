@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page flex flex-col relative">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 flex flex-col relative">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -9,13 +9,13 @@
     </header>
 
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-8 space-y-5">
-      <div class="app-card rounded-2xl p-4">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <div class="flex items-center justify-between mb-2">
           <label class="block text-sm font-medium text-slate-700">添加你要携带的装备</label>
           <button
             @click="importMyEquipments"
             :disabled="importingMyEquipments"
-            class="app-action-button m-0 px-3 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-xs font-medium disabled:opacity-50"
+            class="app-action-button m-0 px-3 py-1.5 rounded-full bg-orange-50 text-orange-700 text-xs font-medium disabled:opacity-50"
           >
             <Icon name="briefcase" size="24rpx" class="mr-1 shrink-0" />
             {{ importingMyEquipments ? '导入中' : '导入我的装备' }}
@@ -70,7 +70,7 @@
           <Icon name="package" size="32rpx" class="mr-1 shrink-0" />
           <span>装备明细评估</span>
         </h3>
-        <div class="app-card rounded-2xl overflow-hidden divide-y divide-slate-50">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-50">
           <div v-for="(item, idx) in result.data.items" :key="idx" class="p-3 flex justify-between items-center">
             <span class="text-sm font-medium text-slate-700 flex-1">{{ item.name }}</span>
             <div class="flex space-x-4 text-xs text-slate-500 font-mono">
@@ -171,4 +171,3 @@ const calculate = async () => {
   }
 }
 </script>
-

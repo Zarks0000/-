@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page flex flex-col relative">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 flex flex-col relative">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -9,7 +9,7 @@
     </header>
 
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-8 space-y-5">
-      <div class="app-card rounded-2xl p-4">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <label class="block text-sm font-medium text-slate-700 mb-2">输入行程信息</label>
         <div class="space-y-3">
           <input 
@@ -58,7 +58,7 @@
       </div>
 
       <div v-if="result" class="space-y-4">
-        <div class="bg-[#064e3b] rounded-2xl p-5 text-white shadow-lg shadow-emerald-900/15 text-center">
+        <div class="bg-gradient-to-r from-amber-400 to-orange-500 rounded-2xl p-5 text-white shadow-lg shadow-orange-500/20 text-center">
           <p class="text-xs opacity-90 mb-1">预估总花费</p>
           <h3 class="text-4xl font-bold font-mono">¥ {{ result.data.total_cny }}</h3>
           <div class="bg-black/10 rounded-lg p-3 text-xs leading-relaxed text-left mt-4">
@@ -70,7 +70,7 @@
           <Icon name="calculator" size="32rpx" class="mr-1 shrink-0" />
           <span>费用拆解</span>
         </h3>
-        <div class="app-card rounded-2xl overflow-hidden divide-y divide-slate-50">
+        <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden divide-y divide-slate-50">
           <div class="p-3 flex justify-between items-center">
             <span class="text-sm font-medium text-slate-700">燃油费</span>
             <span class="text-sm font-bold font-mono text-slate-800">¥ {{ result.data.fuel_cny }}</span>
@@ -129,4 +129,3 @@ const estimate = async () => {
   }
 }
 </script>
-

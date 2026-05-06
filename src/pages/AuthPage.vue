@@ -3,7 +3,7 @@
     <div class="w-20 h-20 rounded-[28rpx] bg-[#064e3b] text-white flex items-center justify-center shadow-[8rpx_8rpx_0_rgba(18,24,21,0.12)]">
       <Icon name="bike" size="72rpx" class="brightness-0 invert" />
     </div>
-    <h1 class="mt-6 text-2xl font-black text-slate-900">摩旅客</h1>
+    <h1 class="mt-6 text-2xl font-black text-slate-900">摩旅工具</h1>
     <p class="mt-2 text-sm leading-relaxed text-slate-500">
       登录后使用行程规划、路线工具和个人数据同步。
     </p>

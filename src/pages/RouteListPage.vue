@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col pb-6">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 relative flex flex-col pb-6">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -13,7 +13,7 @@
         v-for="rt in exploreRoutes"
         :key="rt.id"
         @click="viewDetail(rt.id)"
-        class="app-card rounded-2xl overflow-hidden relative cursor-pointer active:scale-[0.98] transition-transform"
+        class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative cursor-pointer active:scale-[0.98] transition-transform"
       >
         <div class="h-28 relative">
           <image :src="rt.image" class="absolute inset-0 w-full h-full" mode="aspectFill" />
@@ -141,4 +141,3 @@ const applyTemplate = (item: any) => {
   border-bottom: 11px solid #64748b;
 }
 </style>
-

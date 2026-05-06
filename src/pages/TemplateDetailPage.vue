@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col pb-20">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 relative flex flex-col pb-20">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -22,7 +22,7 @@
 
       <div class="p-4 relative z-10">
         <!-- 信息卡片 -->
-        <div class="app-card rounded-2xl p-4 mb-4 flex justify-between">
+        <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100 mb-4 flex justify-between">
            <div class="text-center flex-1 border-r border-slate-100">
              <div class="text-xs text-slate-400 mb-1">建议天数</div>
              <div class="font-bold text-slate-800">{{ data.days }} 天</div>
@@ -39,7 +39,7 @@
           <span>分日路书参考</span>
         </h3>
         <div class="space-y-3">
-          <div v-for="day in data.schedule" :key="day.day" class="app-card rounded-2xl p-4">
+          <div v-for="day in data.schedule" :key="day.day" class="bg-white rounded-2xl p-4 shadow-sm border border-slate-100">
             <div class="flex justify-between items-center mb-2">
               <span class="bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded text-xs font-bold">
                 Day {{ day.day }}
@@ -120,4 +120,3 @@ const applyTemplate = () => {
   }, 50)
 }
 </script>
-

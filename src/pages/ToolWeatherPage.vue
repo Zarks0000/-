@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page flex flex-col relative">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 flex flex-col relative">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex items-center justify-between sticky top-0 z-50 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -9,7 +9,7 @@
     </header>
 
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-8 space-y-5">
-      <div class="app-card rounded-2xl p-4">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <label class="block text-sm font-medium text-slate-700 mb-2">输入查询城市</label>
         <input
           v-model="city"
@@ -93,8 +93,8 @@
             </div>
           </div>
         </div>
-        <div v-if="result.weather && result.message" class="bg-slate-50 rounded-xl p-3 border border-slate-100">
-          <p class="text-xs text-slate-600 leading-relaxed">{{ result.message }}</p>
+        <div v-if="result.weather && result.message" class="bg-amber-50 rounded-xl p-3 border border-amber-100">
+          <p class="text-xs text-amber-700 leading-relaxed">{{ result.message }}</p>
         </div>
         <div v-else-if="result.message" class="bg-white rounded-xl p-4 text-center border border-slate-100">
           <p class="text-sm text-slate-500">{{ result.message }}</p>
@@ -106,7 +106,7 @@
             <Icon name="shield-alert" size="32rpx" class="mr-1 shrink-0" />
             <span>灾害预警</span>
           </h3>
-          <div v-for="(alert, idx) in result.alerts" :key="idx" class="app-card rounded-2xl p-4 mb-3">
+          <div v-for="(alert, idx) in result.alerts" :key="idx" class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4 mb-3">
             <div class="flex items-center space-x-2 mb-2">
               <h3 class="font-bold text-slate-800 text-sm">{{ alert.title }}</h3>
             </div>
@@ -191,4 +191,3 @@ const search = async () => {
   }
 }
 </script>
-

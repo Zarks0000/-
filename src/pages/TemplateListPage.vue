@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col pb-6">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 relative flex flex-col pb-6">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -14,7 +14,7 @@
           v-for="tpl in exploreTemplates"
           :key="tpl.id"
           @click="viewDetail(tpl.id)"
-          class="app-card p-3 rounded-2xl flex flex-col items-center text-center cursor-pointer active:scale-95 transition-transform"
+          class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col items-center text-center cursor-pointer active:scale-95 transition-transform"
         >
           <image :src="tpl.image" class="w-full h-24 rounded-md mb-2" mode="aspectFill" />
           <h4 class="text-xs font-bold text-slate-800">{{ tpl.title }}</h4>
@@ -59,4 +59,3 @@ const applyTemplate = (item: any) => {
   }, 50)
 }
 </script>
-

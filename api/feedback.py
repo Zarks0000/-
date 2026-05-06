@@ -75,7 +75,7 @@ def _send_feedback_email(payload: FeedbackRequest, user_id: Optional[str]) -> No
         raise ValueError("后端未配置 SMTP_HOST / SMTP_FROM，无法发送反馈邮件")
 
     message = EmailMessage()
-    message["Subject"] = "摩旅客用户反馈"
+    message["Subject"] = "摩旅工具用户反馈"
     message["From"] = smtp_from
     message["To"] = FEEDBACK_TO_EMAIL
     if _env_bool("FEEDBACK_BCC_TO_SENDER", True) and smtp_from.lower() != FEEDBACK_TO_EMAIL.lower():
@@ -88,7 +88,7 @@ def _send_feedback_email(payload: FeedbackRequest, user_id: Optional[str]) -> No
 
     body = "\n".join(
         [
-            "摩旅客收到一条用户反馈：",
+            "摩旅工具收到一条用户反馈：",
             "",
             f"用户标识：{user_id or '未知'}",
             f"页面来源：{(payload.page or '').strip() or '未提供'}",

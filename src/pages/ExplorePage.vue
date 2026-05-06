@@ -1,21 +1,19 @@
 ﻿﻿<template>
-  <div class="h-full app-page flex flex-col relative">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex items-center sticky top-0 z-40 shrink-0">
+  <div class="h-full bg-[#faf9f6] flex flex-col relative">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-[#faf9f6] flex items-center sticky top-0 z-40 shrink-0">
       <div class="flex items-center w-full">
         <button v-if="canGoBack" @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600 mr-1">
           <Icon name="chevron-left" size="40rpx" />
         </button>
-        <div>
-          <h1 class="text-xl font-black text-slate-900 tracking-wide">发现</h1>
-        </div>
+        <h1 class="text-xl font-bold text-slate-900">发现</h1>
       </div>
     </header>
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-24 space-y-6">
       <!-- 2. 场景模板库 -->
       <section>
         <div class="relative w-full flex items-center mb-3 pr-20">
-          <h3 class="app-section-heading">场景模板</h3>
-          <button @click="router.push('/templates')" class="absolute right-0 top-1/2 -translate-y-1/2 m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs app-link flex items-center justify-end leading-none">
+          <h3 class="font-bold text-slate-800">场景模板</h3>
+          <button @click="router.push('/templates')" class="absolute right-0 top-1/2 -translate-y-1/2 m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs text-slate-400 flex items-center justify-end leading-none">
             <span>全部</span><Icon name="chevron-right" size="24rpx" class="ml-1" />
           </button>
         </div>
@@ -24,15 +22,14 @@
             v-for="tpl in displayedTemplates"
             :key="tpl.id"
             @click="viewDetail(tpl.id)"
-            class="app-card p-3 rounded-2xl cursor-pointer active:scale-95 transition-transform relative overflow-hidden"
+            class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-transform"
           >
-            <div class="absolute right-[-12rpx] top-[-12rpx] w-10 h-10 rounded-full bg-[#064e3b]/8"></div>
             <div class="w-8 h-8 rounded-lg flex items-center justify-center mb-2" :class="iconBgClass(tpl.iconBg)">
               <Icon :name="iconName(tpl.icon)" size="32rpx" />
             </div>
             <h4 class="text-sm font-bold text-slate-800">{{ tpl.title }}</h4>
             <p class="text-[10px] text-slate-400 mt-1 line-clamp-1">{{ tpl.desc }}</p>
-            <button @click.stop="applyTemplate(tpl)" class="app-action-button mt-3 w-full py-1.5 text-xs text-[#064e3b] bg-[#eef7f2] border border-[#cfe5da] rounded-full font-bold">套用模板</button>
+            <button @click.stop="applyTemplate(tpl)" class="app-action-button mt-3 w-full py-1.5 text-xs text-[#064e3b] bg-[#064e3b]/5 rounded-md font-medium">套用模板</button>
           </div>
         </div>
       </section>
@@ -40,29 +37,29 @@
       <!-- 3. 独立工具区 -->
       <section>
         <div class="w-full flex items-center mb-3">
-          <h3 class="app-section-heading">实用工具</h3>
+          <h3 class="font-bold text-slate-800">实用工具</h3>
         </div>
         <div class="grid grid-cols-4 gap-2">
-          <div @click="router.push('/tool/restriction')" class="app-card py-3 flex flex-col items-center rounded-2xl cursor-pointer active:scale-95 transition-transform">
-            <div class="w-10 h-10 bg-red-50 rounded-2xl flex items-center justify-center mb-1">
+          <div @click="router.push('/tool/restriction')" class="bg-white py-3 flex flex-col items-center rounded-xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-transform">
+            <div class="w-10 h-10 bg-red-50 rounded-full flex items-center justify-center mb-1">
               <Icon name="shield-alert" size="40rpx" />
             </div>
             <span class="text-[10px] font-medium text-slate-700">禁摩查询</span>
           </div>
-          <div @click="router.push('/tool/weather')" class="app-card py-3 flex flex-col items-center rounded-2xl cursor-pointer active:scale-95 transition-transform">
-            <div class="w-10 h-10 bg-sky-50 rounded-2xl flex items-center justify-center mb-1">
+          <div @click="router.push('/tool/weather')" class="bg-white py-3 flex flex-col items-center rounded-xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-transform">
+            <div class="w-10 h-10 bg-sky-50 rounded-full flex items-center justify-center mb-1">
               <Icon name="cloud-sun" size="40rpx" />
             </div>
             <span class="text-[10px] font-medium text-slate-700">天气查询</span>
           </div>
-          <div @click="router.push('/tool/equipment')" class="app-card py-3 flex flex-col items-center rounded-2xl cursor-pointer active:scale-95 transition-transform">
-            <div class="w-10 h-10 bg-emerald-50 rounded-2xl flex items-center justify-center mb-1">
+          <div @click="router.push('/tool/equipment')" class="bg-white py-3 flex flex-col items-center rounded-xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-transform">
+            <div class="w-10 h-10 bg-emerald-50 rounded-full flex items-center justify-center mb-1">
               <Icon name="package" size="40rpx" />
             </div>
             <span class="text-[10px] font-medium text-slate-700">装备计算</span>
           </div>
-          <div @click="router.push('/tool/budget')" class="app-card py-3 flex flex-col items-center rounded-2xl cursor-pointer active:scale-95 transition-transform">
-            <div class="w-10 h-10 bg-slate-50 rounded-2xl flex items-center justify-center mb-1">
+          <div @click="router.push('/tool/budget')" class="bg-white py-3 flex flex-col items-center rounded-xl shadow-sm border border-slate-100 cursor-pointer active:scale-95 transition-transform">
+            <div class="w-10 h-10 bg-amber-50 rounded-full flex items-center justify-center mb-1">
               <Icon name="calculator" size="40rpx" />
             </div>
             <span class="text-[10px] font-medium text-slate-700">预算估算</span>
@@ -73,8 +70,8 @@
       <!-- 精选路线参考 -->
       <section>
         <div class="relative w-full flex items-center mb-3 pr-20">
-          <h3 class="app-section-heading">精选路线参考</h3>
-          <button @click="router.push('/routes')" class="absolute right-0 top-1/2 -translate-y-1/2 m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs app-link flex items-center justify-end leading-none">
+          <h3 class="font-bold text-slate-800">精选路线参考</h3>
+          <button @click="router.push('/routes')" class="absolute right-0 top-1/2 -translate-y-1/2 m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs text-slate-400 flex items-center justify-end leading-none">
             <span>全部</span><Icon name="chevron-right" size="24rpx" class="ml-1" />
           </button>
         </div>
@@ -83,7 +80,7 @@
             v-for="rt in displayedRoutes"
             :key="rt.id"
             @click="viewDetail(rt.id)"
-            class="app-card-strong rounded-[28rpx] overflow-hidden relative cursor-pointer active:scale-[0.98] transition-transform"
+            class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden relative cursor-pointer active:scale-[0.98] transition-transform"
           >
             <div class="h-28 relative">
               <image :src="rt.image" class="absolute inset-0 w-full h-full" mode="aspectFill" />
@@ -108,7 +105,7 @@
                   <text class="route-meta-text">{{ rt.style === 'leisure' ? '休闲游' : (rt.style === 'aggressive' ? '挑战' : '标准') }}</text>
                 </div>
               </div>
-              <button @click.stop="applyTemplate(rt)" class="app-action-button app-primary-button ml-3 shrink-0 px-4 py-1.5 rounded-full text-xs font-bold">
+              <button @click.stop="applyTemplate(rt)" class="app-action-button ml-3 shrink-0 bg-[#064e3b] text-white px-4 py-1.5 rounded-full text-xs font-bold shadow-sm active:scale-95 transition-transform">
                 参考路线
               </button>
             </div>
@@ -119,8 +116,8 @@
       <!-- 4. 摩旅知识卡片 -->
       <section>
         <div class="relative w-full flex items-center mb-3 pr-24">
-          <h3 class="app-section-heading">摩旅知识</h3>
-          <button @click="router.push('/knowledge')" class="absolute right-0 top-1/2 -translate-y-1/2 m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs app-link flex items-center justify-end leading-none">
+          <h3 class="font-bold text-slate-800">摩旅知识</h3>
+          <button @click="router.push('/knowledge')" class="absolute right-0 top-1/2 -translate-y-1/2 m-0 p-0 bg-transparent border-0 rounded-none shadow-none text-xs text-slate-400 flex items-center justify-end leading-none">
             <span>查看全部</span><Icon name="chevron-right" size="24rpx" class="ml-1" />
           </button>
         </div>
@@ -129,9 +126,9 @@
             v-for="knowledge in displayedKnowledge" 
             :key="knowledge.id"
             @click="router.push(`/knowledge/${knowledge.id}`)"
-            class="app-card p-3 rounded-2xl flex space-x-3 cursor-pointer active:scale-[0.98] transition-transform"
+            class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex space-x-3 cursor-pointer active:scale-[0.98] transition-transform"
           >
-            <div class="w-20 h-20 bg-slate-100 rounded-2xl shrink-0 flex items-center justify-center overflow-hidden border border-[#ebe4d7]">
+            <div class="w-20 h-20 bg-slate-100 rounded-md shrink-0 flex items-center justify-center overflow-hidden">
               <image v-if="knowledge.image" :src="knowledge.image" class="w-full h-full" mode="aspectFill" />
               <div v-else class="text-[11px] font-bold tracking-wide text-slate-400">摩旅</div>
             </div>
@@ -182,8 +179,8 @@ const iconName = (raw?: string) => {
 
 const iconBgClass = (raw?: string) => {
   switch (raw) {
-    case 'bg-warm-50':
-      return 'bg-slate-50'
+    case 'bg-orange-50':
+      return 'bg-orange-50'
     case 'bg-emerald-50':
       return 'bg-emerald-50'
     case 'bg-blue-50':
@@ -281,4 +278,3 @@ const applyTemplate = (item: any) => {
   border-bottom: 11px solid #64748b;
 }
 </style>
-

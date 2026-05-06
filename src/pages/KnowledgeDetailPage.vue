@@ -1,6 +1,6 @@
 ﻿﻿<template>
-  <div class="h-full app-page relative flex flex-col pb-6">
-    <header class="app-safe-header app-topbar h-24 pt-10 px-4 flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
+  <div class="h-full bg-slate-50 relative flex flex-col pb-6">
+    <header class="app-safe-header h-24 pt-10 px-4 bg-white flex justify-between items-center sticky top-0 z-40 shrink-0 border-b border-slate-100">
       <button @click="router.back()" class="app-back-button -ml-2 text-slate-400 hover:text-slate-600">
         <Icon name="chevron-left" size="40rpx" />
       </button>
@@ -9,7 +9,7 @@
     </header>
 
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-8" v-if="data">
-      <div class="app-card rounded-2xl overflow-hidden">
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
         <!-- 顶部配图区 -->
         <div v-if="data.image" class="w-full h-48 relative">
           <image :src="data.image" class="w-full h-full" mode="aspectFill" />
@@ -66,4 +66,3 @@ onMounted(() => {
   }
 })
 </script>
-
