@@ -62,7 +62,7 @@
             <Icon name="x" size="32rpx" />
           </button>
         </div>
-        <div class="space-y-3">
+        <div class="app-form-stack">
           <div>
             <label class="form-label">模板名称</label>
             <input v-model="draft.title" type="text" placeholder-class="app-input-placeholder" placeholder="如 周末环湖" class="w-full input app-input" />
@@ -78,24 +78,26 @@
         </div>
         <div class="pt-1 border-t border-slate-100">
           <div class="text-xs text-slate-500 mb-2">分日路书</div>
-          <div v-for="(day, dIdx) in draft.schedule" :key="`day-${dIdx}`" class="bg-slate-50 rounded-xl p-3 mb-3 border border-slate-200 space-y-3">
+          <div v-for="(day, dIdx) in draft.schedule" :key="`day-${dIdx}`" class="bg-slate-50 rounded-xl p-3 mb-3 border border-slate-200">
             <div class="flex justify-between items-center">
               <span class="text-xs text-slate-500">Day {{ dIdx + 1 }}</span>
               <button @click="removeSchedule(dIdx)" class="app-icon-button w-8 h-8 text-slate-300 hover:text-red-400">
                 <Icon name="trash-2" size="32rpx" />
               </button>
             </div>
-            <div>
-              <label class="form-label">当天标题</label>
-              <input v-model="day.title" type="text" placeholder-class="app-input-placeholder" placeholder="如 城市 A 到城市 B" class="w-full input app-input" />
-            </div>
-            <div>
-              <label class="form-label">当天里程</label>
-              <input v-model.number="day.distance_km" type="number" min="0" placeholder-class="app-input-placeholder" placeholder="请输入预计里程，如 120 km" class="w-full input app-input" />
-            </div>
-            <div>
-              <label class="form-label">当天描述</label>
-              <textarea v-model="day.description" rows="2" placeholder-class="app-textarea-placeholder" placeholder="可填写途经点、住宿点、注意事项等" class="w-full input app-textarea resize-none"></textarea>
+            <div class="app-form-stack mt-3">
+              <div>
+                <label class="form-label">当天标题</label>
+                <input v-model="day.title" type="text" placeholder-class="app-input-placeholder" placeholder="如 城市 A 到城市 B" class="w-full input app-input" />
+              </div>
+              <div>
+                <label class="form-label">当天里程</label>
+                <input v-model.number="day.distance_km" type="number" min="0" placeholder-class="app-input-placeholder" placeholder="请输入预计里程，如 120 km" class="w-full input app-input" />
+              </div>
+              <div>
+                <label class="form-label">当天描述</label>
+                <textarea v-model="day.description" rows="2" placeholder-class="app-textarea-placeholder" placeholder="可填写途经点、住宿点、注意事项等" class="w-full input app-textarea resize-none"></textarea>
+              </div>
             </div>
           </div>
           <button @click="addSchedule" class="app-action-button w-full py-2 text-xs text-[#064e3b] bg-[#064e3b]/5 rounded-lg font-medium">新增一天路书</button>

@@ -48,26 +48,28 @@
       class="absolute inset-0 z-[70] bg-black/40 flex items-end"
       @click.self="showEditor = false"
     >
-      <div class="w-full max-h-[84vh] overflow-y-auto hide-scrollbar bg-white rounded-t-2xl p-4 space-y-2" @click.stop>
-        <div class="flex items-center justify-between mb-1">
+      <div class="w-full max-h-[84vh] overflow-y-auto hide-scrollbar bg-white rounded-t-2xl p-4" @click.stop>
+        <div class="flex items-center justify-between mb-4">
           <h3 class="text-sm font-bold text-slate-800">{{ editingIndex >= 0 ? '编辑车辆' : '新增车辆' }}</h3>
           <button @click="showEditor = false" class="app-icon-button app-close-button">
             <Icon name="x" size="32rpx" />
           </button>
         </div>
-        <input v-model="draft.brand" type="text" placeholder-class="app-input-placeholder" placeholder="品牌（如 Honda）" class="w-full input app-input" />
-        <input v-model="draft.model" type="text" placeholder-class="app-input-placeholder" placeholder="车型（如 CB500X）" class="w-full input app-input" />
-        <div class="grid grid-cols-2 gap-2">
-          <input v-model="draft.displacement" type="text" placeholder-class="app-input-placeholder" placeholder="排量（如 500cc）" class="w-full input app-input" />
-          <input v-model="draft.plate_no" type="text" placeholder-class="app-input-placeholder" placeholder="车牌（可选）" class="w-full input app-input" />
+        <div class="app-form-stack">
+          <input v-model="draft.brand" type="text" placeholder-class="app-input-placeholder" placeholder="品牌（如 Honda）" class="w-full input app-input" />
+          <input v-model="draft.model" type="text" placeholder-class="app-input-placeholder" placeholder="车型（如 CB500X）" class="w-full input app-input" />
+          <div class="app-form-grid">
+            <input v-model="draft.displacement" type="text" placeholder-class="app-input-placeholder" placeholder="排量（如 500cc）" class="w-full input app-input" />
+            <input v-model="draft.plate_no" type="text" placeholder-class="app-input-placeholder" placeholder="车牌（可选）" class="w-full input app-input" />
+          </div>
+          <button
+            @click="saveEditor"
+            :disabled="saving"
+            class="app-full-button w-full mt-1 bg-[#064e3b] text-white font-bold py-3 rounded-xl disabled:opacity-50"
+          >
+            {{ saving ? '保存中...' : '保存' }}
+          </button>
         </div>
-        <button
-          @click="saveEditor"
-          :disabled="saving"
-          class="app-full-button w-full mt-2 bg-[#064e3b] text-white font-bold py-3 rounded-xl disabled:opacity-50"
-        >
-          {{ saving ? '保存中...' : '保存' }}
-        </button>
       </div>
     </div>
   </div>

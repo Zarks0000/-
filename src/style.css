@@ -31,6 +31,21 @@ textarea {
   box-sizing: border-box;
 }
 
+*,
+[class*="shadow"] {
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+[class*="drop-shadow"] {
+  filter: none !important;
+}
+
+input,
+textarea {
+  display: block;
+}
+
 button {
   display: flex;
   align-items: center;
@@ -180,6 +195,32 @@ button::after {
   color: #94a3b8;
   font-size: 28rpx;
   line-height: 40rpx;
+}
+
+.app-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.app-form-stack > * {
+  min-width: 0;
+}
+
+.app-form-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 24rpx;
+}
+
+.app-form-row {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.app-form-row > * {
+  min-width: 0;
 }
 
 .app-icon-button {

@@ -21,8 +21,8 @@
             {{ importingMyEquipments ? '导入中' : '导入我的装备' }}
           </button>
         </div>
-        <div class="space-y-3 mb-4">
-          <div v-for="(item, idx) in items" :key="idx" class="flex space-x-2">
+        <div class="app-form-stack mb-4">
+          <div v-for="(item, idx) in items" :key="idx" class="app-form-row">
             <input 
               v-model="items[idx]" 
               type="text" 

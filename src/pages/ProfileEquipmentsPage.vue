@@ -48,26 +48,28 @@
       class="absolute inset-0 z-[70] bg-black/40 flex items-end"
       @click.self="showEditor = false"
     >
-      <div class="w-full max-h-[84vh] overflow-y-auto hide-scrollbar bg-white rounded-t-2xl p-4 space-y-2" @click.stop>
-        <div class="flex items-center justify-between mb-1">
+      <div class="w-full max-h-[84vh] overflow-y-auto hide-scrollbar bg-white rounded-t-2xl p-4" @click.stop>
+        <div class="flex items-center justify-between mb-4">
           <h3 class="text-sm font-bold text-slate-800">{{ editingIndex >= 0 ? '编辑装备' : '新增装备' }}</h3>
           <button @click="showEditor = false" class="app-icon-button app-close-button">
             <Icon name="x" size="32rpx" />
           </button>
         </div>
-        <input v-model="draft.name" type="text" placeholder-class="app-input-placeholder" placeholder="装备名称（如 防水骑行靴）" class="w-full input app-input" />
-        <div class="grid grid-cols-2 gap-2">
-          <input v-model="draft.category" type="text" placeholder-class="app-input-placeholder" placeholder="分类（服装/工具）" class="w-full input app-input" />
-          <input v-model.number="draft.weight_kg" type="number" step="0.1" placeholder-class="app-input-placeholder" placeholder="重量kg（可选）" class="w-full input app-input" />
+        <div class="app-form-stack">
+          <input v-model="draft.name" type="text" placeholder-class="app-input-placeholder" placeholder="装备名称（如 防水骑行靴）" class="w-full input app-input" />
+          <div class="app-form-grid">
+            <input v-model="draft.category" type="text" placeholder-class="app-input-placeholder" placeholder="分类（服装/工具）" class="w-full input app-input" />
+            <input v-model.number="draft.weight_kg" type="number" step="0.1" placeholder-class="app-input-placeholder" placeholder="重量kg（可选）" class="w-full input app-input" />
+          </div>
+          <textarea v-model="draft.note" rows="2" placeholder-class="app-textarea-placeholder" placeholder="备注（可选）" class="w-full input app-textarea resize-none"></textarea>
+          <button
+            @click="saveEditor"
+            :disabled="saving"
+            class="app-full-button w-full mt-1 bg-[#064e3b] text-white font-bold py-3 rounded-xl disabled:opacity-50"
+          >
+            {{ saving ? '保存中...' : '保存' }}
+          </button>
         </div>
-        <textarea v-model="draft.note" rows="2" placeholder-class="app-textarea-placeholder" placeholder="备注（可选）" class="w-full input app-textarea resize-none"></textarea>
-        <button
-          @click="saveEditor"
-          :disabled="saving"
-          class="app-full-button w-full mt-2 bg-[#064e3b] text-white font-bold py-3 rounded-xl disabled:opacity-50"
-        >
-          {{ saving ? '保存中...' : '保存' }}
-        </button>
       </div>
     </div>
   </div>

@@ -11,7 +11,7 @@
     <main class="flex-1 min-h-0 overflow-y-auto hide-scrollbar p-4 pb-8 space-y-5">
       <div class="bg-white rounded-2xl shadow-sm border border-slate-100 p-4">
         <label class="block text-sm font-medium text-slate-700 mb-2">输入行程信息</label>
-        <div class="space-y-3">
+        <div class="app-form-stack">
           <input 
             v-model="origin" 
             type="text" 
@@ -50,7 +50,7 @@
           <button 
             @click="estimate"
             :disabled="loading || !origin || !destination || !days"
-            class="app-full-button w-full bg-[#064e3b] text-white px-5 py-3 rounded-xl text-sm font-bold shadow-sm active:scale-95 transition-transform disabled:opacity-50 mt-2"
+            class="app-full-button w-full bg-[#064e3b] text-white px-5 py-3 rounded-xl text-sm font-bold active:scale-95 transition-transform disabled:opacity-50 mt-1"
           >
             {{ loading ? '正在估算' : '开始估算' }}
           </button>

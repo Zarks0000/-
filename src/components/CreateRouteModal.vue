@@ -4,7 +4,7 @@
     <div class="absolute inset-0 bg-black/40 transition-opacity" @click="close"></div>
     
     <!-- 模态框主体 -->
-    <div class="relative bg-white w-full rounded-t-3xl shadow-2xl overflow-hidden transform transition-transform duration-300">
+    <div class="relative bg-white w-full rounded-t-3xl overflow-hidden transform transition-transform duration-300">
       <div class="p-6 max-h-[82vh] overflow-y-auto hide-scrollbar">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-xl font-bold text-slate-800">新建行程</h2>
@@ -13,7 +13,7 @@
           </button>
         </div>
 
-        <div class="space-y-4">
+        <div class="app-form-stack">
           <!-- 行程名称 -->
           <div>
             <label class="block text-xs font-medium text-slate-500 mb-1">行程名称</label>
@@ -92,7 +92,7 @@
             type="button"
             @click="submitForm"
             :disabled="store.isLoading.value"
-            class="route-submit-button w-[80%] mx-auto mt-6 bg-[#064e3b] text-white text-sm font-bold h-11 rounded-xl shadow-md shadow-[#064e3b]/20 active:scale-[0.98] transition-transform disabled:opacity-50 flex justify-center items-center"
+            class="route-submit-button w-[80%] mx-auto mt-4 bg-[#064e3b] text-white text-sm font-bold h-11 rounded-xl active:scale-[0.98] transition-transform disabled:opacity-50 flex justify-center items-center"
           >
             <span v-if="store.isLoading.value" class="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-2"></span>
             {{ store.isLoading.value ? '正在智能规划中...' : '开始筹备' }}
