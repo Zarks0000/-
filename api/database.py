@@ -8,6 +8,7 @@ from queue import Empty, Full, LifoQueue
 from threading import Lock
 from typing import Any, Iterable, Optional
 from uuid import UUID
+from urllib.parse import parse_qsl, urlencode, urlsplit, urlunsplit
 
 import psycopg
 from dotenv import load_dotenv
@@ -16,12 +17,26 @@ from psycopg.types.json import Jsonb
 
 load_dotenv()
 load_dotenv(Path(__file__).with_name(".env"), override=True)
-load_dotenv(Path(__file__).with_name(".env.postgres"), override=True)
+load_dotenv(Path(__file__).with_name(".env.postgres"), override=False)
+
+
+def _append_query_param(url: str, key: str, value: str) -> str:
+    parsed = urlsplit(url)
+    query = dict(parse_qsl(parsed.query, keep_blank_values=True))
+    if key not in query:
+        query[key] = value
+    return urlunsplit((parsed.scheme, parsed.netloc, parsed.path, urlencode(query), parsed.fragment))
 
 
 def _database_url() -> str:
-    url = (os.getenv("DATABASE_URL") or "").strip()
+    url = (
+        os.getenv("SUPABASE_DATABASE_URL")
+        or os.getenv("DATABASE_URL")
+        or ""
+    ).strip()
     if url:
+        if "supabase" in url.lower() and "sslmode=" not in url.lower():
+            return _append_query_param(url, "sslmode", "require")
         return url
 
     host = (os.getenv("POSTGRES_HOST") or "127.0.0.1").strip()
