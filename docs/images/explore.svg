@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="760" viewBox="0 0 360 760" role="img" aria-label="摩旅工具发现页预览">
+  <rect width="360" height="760" rx="34" fill="#eef3f1"/>
+  <rect x="28" y="24" width="304" height="712" rx="34" fill="#ffffff" stroke="#d8e0dc" stroke-width="2"/>
+  <rect x="46" y="50" width="268" height="652" rx="24" fill="#fbfdfc"/>
+  <text x="62" y="82" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="11" font-weight="700" fill="#334155">9:41</text>
+  <text x="62" y="124" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="22" font-weight="900" fill="#0f172a">发现</text>
+  <rect x="62" y="150" width="236" height="116" rx="20" fill="#0f172a"/>
+  <path d="M62 232c44-28 75-14 112-39 45-30 82-20 124 10v63H62z" fill="#16a34a" opacity=".58"/>
+  <path d="M62 244c40-19 70-10 104-28 43-23 88-14 132 6v44H62z" fill="#fde68a" opacity=".78"/>
+  <text x="82" y="186" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="13" fill="#bbf7d0">精选模板</text>
+  <text x="82" y="218" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="24" font-weight="900" fill="#ffffff">周末短途灵感</text>
+  <text x="82" y="242" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#e2e8f0">城市周边 · 山路 · 海岸线</text>
+
+  <text x="62" y="306" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="16" font-weight="900" fill="#0f172a">摩旅工具箱</text>
+  <g font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" font-weight="800" fill="#334155">
+    <rect x="62" y="326" width="108" height="70" rx="16" fill="#ffffff" stroke="#d8e0dc"/>
+    <circle cx="92" cy="352" r="13" fill="#dbeafe"/>
+    <path d="M85 354h14M92 346v14" stroke="#2563eb" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="82" y="379">天气</text>
+    <rect x="190" y="326" width="108" height="70" rx="16" fill="#ffffff" stroke="#d8e0dc"/>
+    <circle cx="220" cy="352" r="13" fill="#fee2e2"/>
+    <path d="M213 345l14 14M227 345l-14 14" stroke="#dc2626" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="210" y="379">禁摩</text>
+    <rect x="62" y="412" width="108" height="70" rx="16" fill="#ffffff" stroke="#d8e0dc"/>
+    <circle cx="92" cy="438" r="13" fill="#fef3c7"/>
+    <text x="86" y="443" font-size="15" fill="#b45309">¥</text>
+    <text x="82" y="465">预算</text>
+    <rect x="190" y="412" width="108" height="70" rx="16" fill="#ffffff" stroke="#d8e0dc"/>
+    <circle cx="220" cy="438" r="13" fill="#dcfce7"/>
+    <path d="M214 438h12M220 432v12" stroke="#16a34a" stroke-width="2.4" stroke-linecap="round"/>
+    <text x="210" y="465">装备</text>
+  </g>
+
+  <text x="62" y="526" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="16" font-weight="900" fill="#0f172a">精选路线</text>
+  <rect x="62" y="546" width="236" height="74" rx="16" fill="#ffffff" stroke="#d8e0dc"/>
+  <rect x="76" y="560" width="58" height="46" rx="12" fill="#bbf7d0"/>
+  <path d="M76 596c17-13 31-5 42-16 9-9 18-8 16 26H76z" fill="#16a34a" opacity=".72"/>
+  <text x="150" y="574" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="14" font-weight="900" fill="#0f172a">草原轻越野</text>
+  <text x="150" y="596" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="11" fill="#64748b">3天 · 420km · 入门友好</text>
+  <rect x="62" y="636" width="236" height="50" rx="16" fill="#f8fafc" stroke="#e2e8f0"/>
+  <text x="82" y="666" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="13" font-weight="800" fill="#334155">摩旅知识：雨天骑行准备清单</text>
+  <rect x="138" y="715" width="84" height="5" rx="3" fill="#cbd5e1"/>
+</svg>

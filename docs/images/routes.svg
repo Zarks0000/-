@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="360" height="760" viewBox="0 0 360 760" role="img" aria-label="摩旅工具行程页预览">
+  <rect width="360" height="760" rx="34" fill="#eef3f1"/>
+  <rect x="28" y="24" width="304" height="712" rx="34" fill="#ffffff" stroke="#d8e0dc" stroke-width="2"/>
+  <rect x="46" y="50" width="268" height="652" rx="24" fill="#fbfdfc"/>
+  <text x="62" y="82" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="11" font-weight="700" fill="#334155">9:41</text>
+  <text x="62" y="124" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="22" font-weight="900" fill="#0f172a">我的行程</text>
+  <rect x="234" y="102" width="64" height="34" rx="17" fill="#16a34a"/>
+  <text x="250" y="124" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="13" font-weight="800" fill="#ffffff">新建</text>
+
+  <rect x="62" y="158" width="236" height="42" rx="21" fill="#edf7f1"/>
+  <rect x="68" y="164" width="72" height="30" rx="15" fill="#16a34a"/>
+  <text x="87" y="184" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" font-weight="800" fill="#ffffff">筹备中</text>
+  <text x="161" y="184" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" font-weight="700" fill="#64748b">进行中</text>
+  <text x="237" y="184" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" font-weight="700" fill="#64748b">已完成</text>
+
+  <rect x="62" y="228" width="236" height="124" rx="18" fill="#ffffff" stroke="#d8e0dc"/>
+  <rect x="78" y="244" width="48" height="24" rx="12" fill="#dcfce7"/>
+  <text x="88" y="261" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="11" font-weight="800" fill="#15803d">筹备</text>
+  <text x="78" y="294" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="20" font-weight="900" fill="#0f172a">川西小环线</text>
+  <text x="78" y="320" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#64748b">2026.05.18</text>
+  <circle cx="165" cy="316" r="3" fill="#cbd5e1"/>
+  <text x="178" y="320" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#64748b">5天</text>
+  <circle cx="216" cy="316" r="3" fill="#cbd5e1"/>
+  <text x="229" y="320" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#64748b">820km</text>
+  <path d="M80 338h188" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round"/>
+
+  <rect x="62" y="372" width="236" height="124" rx="18" fill="#ffffff" stroke="#d8e0dc"/>
+  <rect x="78" y="388" width="48" height="24" rx="12" fill="#e0f2fe"/>
+  <text x="88" y="405" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="11" font-weight="800" fill="#0369a1">计划</text>
+  <text x="78" y="438" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="20" font-weight="900" fill="#0f172a">海边周末线</text>
+  <text x="78" y="464" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#64748b">2026.06.01</text>
+  <circle cx="165" cy="460" r="3" fill="#cbd5e1"/>
+  <text x="178" y="464" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#64748b">2天</text>
+  <circle cx="216" cy="460" r="3" fill="#cbd5e1"/>
+  <text x="229" y="464" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" fill="#64748b">260km</text>
+  <path d="M80 482h188" stroke="#e2e8f0" stroke-width="2" stroke-linecap="round"/>
+
+  <text x="62" y="540" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="16" font-weight="900" fill="#0f172a">路书片段</text>
+  <rect x="62" y="560" width="236" height="86" rx="16" fill="#f1f5f9"/>
+  <circle cx="86" cy="586" r="12" fill="#16a34a"/>
+  <text x="82" y="591" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" font-weight="900" fill="#ffffff">1</text>
+  <text x="110" y="584" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="13" font-weight="800" fill="#0f172a">成都 → 康定</text>
+  <text x="110" y="606" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="11" fill="#64748b">约 290km，注意山区降温</text>
+  <circle cx="86" cy="628" r="12" fill="#94a3b8"/>
+  <text x="82" y="633" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="12" font-weight="900" fill="#ffffff">2</text>
+  <text x="110" y="631" font-family="Arial,'Microsoft YaHei',sans-serif" font-size="13" font-weight="800" fill="#0f172a">康定 → 新都桥</text>
+
+  <rect x="138" y="715" width="84" height="5" rx="3" fill="#cbd5e1"/>
+</svg>
