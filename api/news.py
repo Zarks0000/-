@@ -102,7 +102,7 @@ def _normalize_place_tokens(place: str) -> list[str]:
     return dedup[:10]
 
 
-def _fetch_juhe_top_items(key: str) -> list[dict[str, Any]]:
+def _fetch_juhe_top_result(key: str) -> tuple[list[dict[str, Any]], Optional[str]]:
     resp = requests.get(
         "http://v.juhe.cn/toutiao/index",
         params={"type": "top", "key": key},
@@ -110,9 +110,13 @@ def _fetch_juhe_top_items(key: str) -> list[dict[str, Any]]:
     )
     resp.raise_for_status()
     data = resp.json() or {}
+    error_code = data.get("error_code")
+    if error_code not in (None, 0, "0"):
+        return [], str(data.get("reason") or f"聚合数据错误码 {error_code}")
+
     result = data.get("result") or {}
     items = result.get("data") or []
-    return [it for it in items if isinstance(it, dict)]
+    return [it for it in items if isinstance(it, dict)], None
 
 
 def _fetch_tavily_items(query: str, max_total: int) -> list[dict[str, Any]]:
@@ -182,33 +186,50 @@ def _build_news_query(keywords: list[str], extra_terms: str = "") -> str:
     return f"{terms} 最新 新闻"
 
 
-def _fetch_news_alerts(keywords: list[str], max_total: int) -> tuple[list[dict[str, Any]], str]:
+def _fetch_news_alerts(keywords: list[str], max_total: int) -> tuple[list[dict[str, Any]], str, str]:
     alerts: list[dict[str, Any]] = []
-
-    if _tavily_key():
-        try:
-            query = _build_news_query(keywords)
-            items = _fetch_tavily_items(query, max_total=max_total)
-            filtered = _filter_items_by_keywords(items, keywords, max_total=max_total)
-            source_items = filtered or items
-            alerts.extend(_to_tavily_news_item(it) for it in source_items[:max_total])
-            if alerts:
-                return _dedupe_alerts(alerts, max_total), "tavily"
-        except Exception:
-            pass
+    detail = ""
 
     juhe_key = _juhe_key()
     if juhe_key:
         try:
-            items = _fetch_juhe_top_items(juhe_key)
+            items, juhe_error = _fetch_juhe_top_result(juhe_key)
+            if juhe_error:
+                detail = juhe_error
             filtered = _filter_items_by_keywords(items, keywords, max_total=max_total)
             alerts.extend(_to_news_item(it) for it in filtered)
             if alerts:
-                return _dedupe_alerts(alerts, max_total), "juhe"
-        except Exception:
-            pass
+                return _dedupe_alerts(alerts, max_total), "juhe", "聚合数据"
+            if items and not detail:
+                detail = "聚合数据有返回，但未命中当前行程关键词"
+        except Exception as exc:
+            detail = f"聚合数据请求失败: {exc}"
 
-    return [], "none"
+    if _tavily_key():
+        try:
+            query_items: list[dict[str, Any]] = []
+            for keyword in [k for k in keywords if k][:4]:
+                query_items.extend(
+                    _fetch_tavily_items(
+                        _build_news_query([keyword], "摩托车 摩旅 路况 交通 管制 天气 旅游"),
+                        max_total=max(2, min(4, max_total)),
+                    )
+                )
+                if len(query_items) >= max_total:
+                    break
+            if not query_items:
+                query_items = _fetch_tavily_items(_build_news_query(keywords), max_total=max_total)
+
+            filtered = _filter_items_by_keywords(query_items, keywords, max_total=max_total)
+            source_items = filtered or query_items
+            alerts.extend(_to_tavily_news_item(it) for it in source_items[:max_total])
+            if alerts:
+                fallback_detail = f"{detail}，已切换联网搜索兜底" if detail else "联网搜索兜底"
+                return _dedupe_alerts(alerts, max_total), "tavily", fallback_detail
+        except Exception as exc:
+            detail = f"{detail}；Tavily 请求失败: {exc}" if detail else f"Tavily 请求失败: {exc}"
+
+    return [], "none", detail or "未获取到相关新闻"
 
 
 @router.get("/api/v1/news/alerts")
@@ -218,8 +239,8 @@ def get_news_alerts(keyword: str, count: int = 3):
         return {"status": "success", "keyword": keyword, "alerts": []}
 
     max_total = max(1, min(10, count))
-    alerts, source = _fetch_news_alerts([k], max_total)
-    return {"status": "success", "keyword": keyword, "source": source, "alerts": alerts}
+    alerts, source, source_detail = _fetch_news_alerts([k], max_total)
+    return {"status": "success", "keyword": keyword, "source": source, "source_detail": source_detail, "alerts": alerts}
 
 
 @router.get("/api/v1/news/route-alerts")
@@ -239,12 +260,13 @@ def get_route_news_alerts(origin: str, destination: str, waypoints: Optional[str
             keywords.append(p)
 
     max_total = max(1, min(20, count))
-    alerts, source = _fetch_news_alerts(keywords, max_total)
+    alerts, source, source_detail = _fetch_news_alerts(keywords, max_total)
     return {
         "status": "success",
         "origin": origin,
         "destination": destination,
         "keywords": keywords,
         "source": source,
+        "source_detail": source_detail,
         "alerts": alerts,
     }

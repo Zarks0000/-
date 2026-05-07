@@ -46,6 +46,8 @@ export interface RouteReminder {
 const state = reactive({
   routes: [] as Route[],
   isLoading: false,
+  isAlertsLoading: false,
+  alertsRequestSeq: 0,
   currentAlerts: [] as any[],
   currentSuggestions: [] as any[],
   currentEquipment: [] as any[],
@@ -210,9 +212,15 @@ export function useRouteStore() {
   })
 
   const fetchAlertsAndSuggestions = async (route: Route) => {
-    if (!route) return
+    if (!route) {
+      state.isAlertsLoading = false
+      return
+    }
 
     // “建议完成”不依赖天气/禁摩/新闻接口，先同步展示后端已持久化的默认待办。
+    const requestSeq = state.alertsRequestSeq + 1
+    state.alertsRequestSeq = requestSeq
+    state.isAlertsLoading = true
     const persistedReminders = route.routeReminders || []
     state.currentAlerts = persistedReminders
     state.currentManualTodos = route.manualTodos || []
@@ -245,6 +253,8 @@ export function useRouteStore() {
       const newsRes = newsResult.status === 'fulfilled' ? newsResult.value : { alerts: [] }
       const suggestionRes = suggestionResult.status === 'fulfilled' ? suggestionResult.value : { data: null }
 
+      if (state.alertsRequestSeq !== requestSeq) return
+
       state.currentAlerts = [
         ...persistedReminders,
         ...(weatherRes.alerts || []),
@@ -258,6 +268,10 @@ export function useRouteStore() {
       
     } catch (e) {
       console.error('Failed to fetch alerts:', e)
+    } finally {
+      if (state.alertsRequestSeq === requestSeq) {
+        state.isAlertsLoading = false
+      }
     }
   }
 
@@ -354,6 +368,7 @@ export function useRouteStore() {
     otherRoutes,
     homeRouteCandidates,
     isLoading,
+    alertsLoading: computed(() => state.isAlertsLoading),
     alerts: computed(() => state.currentAlerts),
     suggestions: computed(() => state.currentSuggestions),
     suggestionTasks: computed<SuggestionTask[]>(() => {

@@ -17,6 +17,16 @@
         </div>
       </div>
 
+      <div v-if="store.alertsLoading.value" class="mb-3 p-4 rounded-r-xl flex space-x-3 items-start border-l-4 bg-emerald-50 border-emerald-500">
+        <Icon name="bell" size="40rpx" />
+        <div class="flex-1 min-w-0">
+          <h2 class="text-sm font-bold text-emerald-900">提醒生成中</h2>
+          <p class="mt-2 text-xs leading-relaxed text-emerald-900">
+            正在获取天气、禁摩和沿途新闻提醒，加载完成后会自动更新。
+          </p>
+        </div>
+      </div>
+
       <section v-if="store.alerts.value.length > 0" class="space-y-3">
         <div
           v-for="(alert, index) in store.alerts.value"
