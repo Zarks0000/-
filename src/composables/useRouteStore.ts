@@ -228,7 +228,7 @@ export function useRouteStore() {
         }
       }
 
-      const [weatherRes, restrictionRes, newsRes, suggestionRes] = await Promise.all([
+      const [weatherResult, restrictionResult, newsResult, suggestionResult] = await Promise.allSettled([
         api.getWeatherAlerts(route.destination),
         api.getRestriction(route.destination),
         api.getNewsAlertsForRoute({ origin: route.origin, destination: route.destination }, 6),
@@ -239,6 +239,11 @@ export function useRouteStore() {
           route.origin
         )
       ])
+
+      const weatherRes = weatherResult.status === 'fulfilled' ? weatherResult.value : { alerts: [] }
+      const restrictionRes = restrictionResult.status === 'fulfilled' ? restrictionResult.value : { data: null }
+      const newsRes = newsResult.status === 'fulfilled' ? newsResult.value : { alerts: [] }
+      const suggestionRes = suggestionResult.status === 'fulfilled' ? suggestionResult.value : { data: null }
 
       state.currentAlerts = [
         ...persistedReminders,

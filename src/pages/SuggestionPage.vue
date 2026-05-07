@@ -81,6 +81,7 @@ const alertIconName = (alert: any) => {
   if (alertLevel(alert) === 'high') return 'alert-triangle'
   if (alert?.type === 'weather') return 'cloud-snow'
   if (alert?.type === 'restriction') return 'shield-alert'
+  if (alert?.type === 'news') return 'bell'
   return 'wrench'
 }
 

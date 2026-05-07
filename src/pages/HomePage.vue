@@ -139,6 +139,7 @@
             >
               <Icon v-if="alert.severity === 'high' || alert.level === 'high'" name="alert-triangle" size="40rpx" />
               <Icon v-else-if="alert.type === 'weather'" name="cloud-snow" size="40rpx" />
+              <Icon v-else-if="alert.type === 'news'" name="bell" size="40rpx" />
               <Icon v-else name="wrench" size="40rpx" />
               
               <div class="text-xs leading-relaxed" :class="{
@@ -288,7 +289,12 @@ import { router } from '@/utils/router'
 
 const store = useRouteStore()
 const homeRoute = computed(() => store.mainRoute.value)
-const homeAlerts = computed(() => store.alerts.value.slice(0, 2))
+const homeAlerts = computed(() => {
+  const alerts = store.alerts.value || []
+  const firstNews = alerts.find((alert: any) => alert?.type === 'news')
+  const priority = alerts.filter((alert: any) => alert?.type !== 'news').slice(0, firstNews ? 1 : 2)
+  return firstNews ? [...priority, firstNews] : priority
+})
 const canGoBack = ref(false)
 const isCreateModalOpen = ref(false)
 const isRouteSwitcherOpen = ref(false)
