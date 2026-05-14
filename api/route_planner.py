@@ -64,6 +64,11 @@ class ManualTodosUpdateRequest(BaseModel):
     manual_todos: Optional[List[ManualTodoItem]] = None
 
 
+class RouteRemindersUpdateRequest(BaseModel):
+    reminders: Optional[List[dict[str, Any]]] = None
+    route_reminders: Optional[List[dict[str, Any]]] = None
+
+
 SYSTEM_TODO_CANDIDATES = [
     "全面检查车辆机油、刹车和轮胎",
     "检查灯光、链条/皮带、胎压和随车工具",
@@ -348,6 +353,44 @@ def _normalize_route_reminders(raw: Any, fallback: list[dict[str, Any]]) -> list
         }
         for item in fallback
     ]
+
+
+def _normalize_persisted_route_reminders(raw: Any) -> list[dict[str, Any]]:
+    if not isinstance(raw, list):
+        return []
+
+    out = []
+    for item in raw:
+        if not isinstance(item, dict):
+            continue
+        title = str(item.get("title") or "").strip()
+        description = str(item.get("description") or item.get("reason") or item.get("action") or "").strip()
+        if not title or not description:
+            continue
+
+        severity = str(item.get("severity") or item.get("level") or "medium").strip()
+        if severity not in {"high", "medium", "low"}:
+            severity = "medium"
+
+        normalized = {
+            "id": str(item.get("id") or f"route-reminder-{uuid.uuid4()}"),
+            "type": str(item.get("type") or "route_ai").strip() or "route_ai",
+            "severity": severity,
+            "level": severity,
+            "title": title,
+            "description": description,
+            "source": str(item.get("source") or "系统出行提醒").strip() or "系统出行提醒",
+        }
+
+        for key in ("time", "url", "city", "location", "is_restricted"):
+            if item.get(key) is not None:
+                normalized[key] = item.get(key)
+
+        out.append(normalized)
+        if len(out) >= 20:
+            break
+
+    return out
 
 
 def _route_guidance_context(
@@ -945,6 +988,46 @@ def update_route_manual_todos(route_id: str, payload: ManualTodosUpdateRequest, 
         raise
     except Exception:
         raise HTTPException(status_code=500, detail="Failed to update manual todos")
+
+
+@router.put("/api/v1/routes/{route_id}/reminders")
+def update_route_reminders(route_id: str, payload: RouteRemindersUpdateRequest, http_request: Request):
+    user_openid = _get_request_user_id(http_request)
+    try:
+        row = _select_route(route_id)
+        if not row:
+            raise HTTPException(status_code=404, detail="Route not found")
+        _authorize_route(row, user_openid)
+
+        wp = row.get("waypoints") if isinstance(row.get("waypoints"), dict) else {}
+        source_items = payload.reminders if payload.reminders is not None else payload.route_reminders
+        normalized = _normalize_persisted_route_reminders(source_items)
+
+        generated_at = datetime.now().isoformat(timespec="seconds")
+        wp["route_reminders"] = normalized
+        wp["route_reminders_generated_at"] = generated_at
+        execute(
+            """
+            UPDATE routes
+            SET waypoints = %s,
+                updated_at = CURRENT_TIMESTAMP
+            WHERE id = %s
+            """,
+            (jsonb(wp), route_id),
+        )
+
+        return {
+            "status": "success",
+            "data": {
+                "route_id": route_id,
+                "route_reminders": normalized,
+                "route_reminders_generated_at": generated_at,
+            },
+        }
+    except HTTPException:
+        raise
+    except Exception:
+        raise HTTPException(status_code=500, detail="Failed to update route reminders")
 
 
 @router.get("/api/v1/routes/{route_id}/static-map")

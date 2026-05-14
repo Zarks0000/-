@@ -103,10 +103,10 @@ const alertLevelText = (alert: any) => {
   return '提醒'
 }
 
-const refreshAlerts = async () => {
+const refreshAlerts = async (options: { forceAlerts?: boolean } = {}) => {
   await store.fetchRoutes()
   if (currentRoute.value) {
-    await store.fetchAlertsAndSuggestions(currentRoute.value)
+    await store.fetchAlertsAndSuggestions(currentRoute.value, { force: options.forceAlerts })
   }
 }
 

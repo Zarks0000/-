@@ -221,6 +221,21 @@ export const api = {
     return response.json()
   },
 
+  async updateRouteReminders(routeId: string, reminders: any[]) {
+    const ts = new Date().getTime()
+    const response = await fetch(`${API_BASE_URL}/routes/${routeId}/reminders?_t=${ts}`, {
+      method: 'PUT',
+      headers: buildAuthHeaders({
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      }),
+      body: JSON.stringify({ route_reminders: reminders }),
+    })
+    return response.json()
+  },
+
   // 删除路线
   async deleteRoute(routeId: string) {
     const ts = new Date().getTime()

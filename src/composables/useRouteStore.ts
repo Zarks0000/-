@@ -18,6 +18,7 @@ export interface Route {
   schedule?: any[] // 后端返回的行程安排
   manualTodos?: ManualTodo[]
   routeReminders?: RouteReminder[]
+  routeRemindersGeneratedAt?: string | null
 }
 
 export interface ManualTodo {
@@ -43,6 +44,10 @@ export interface RouteReminder {
   source?: string
 }
 
+interface FetchAlertsOptions {
+  force?: boolean
+}
+
 const state = reactive({
   routes: [] as Route[],
   isLoading: false,
@@ -56,6 +61,23 @@ const state = reactive({
   lastAlertsFetchKey: '',
   lastAlertsFetchAt: 0,
 })
+
+const getAlertsFetchKey = (route: Route) => `${route.id}:${route.destination}:${route.startDate}`
+
+const hydrateRouteState = (route: Route | null | undefined) => {
+  state.currentManualTodos = route?.manualTodos || []
+
+  if (!route) {
+    state.currentAlerts = []
+    state.currentSuggestions = []
+    state.currentEquipment = []
+    return
+  }
+
+  state.currentAlerts = route.routeReminders || []
+  state.currentSuggestions = []
+  state.currentEquipment = []
+}
 
 const normalizeManualTodos = (raw: any): ManualTodo[] => {
   if (!Array.isArray(raw)) return []
@@ -162,7 +184,8 @@ export function useRouteStore() {
             totalDuration: r.total_duration || 0,
             schedule: wp?.schedule && Array.isArray(wp.schedule) ? wp.schedule : undefined,
             manualTodos: todos,
-            routeReminders
+            routeReminders,
+            routeRemindersGeneratedAt: wp?.route_reminders_generated_at || null,
           }
         })
         if (state.selectedHomeRouteId && !state.routes.some(r => r.id === state.selectedHomeRouteId)) {
@@ -172,8 +195,7 @@ export function useRouteStore() {
         const activeRoute = state.selectedHomeRouteId
           ? state.routes.find(r => r.id === state.selectedHomeRouteId)
           : state.routes.find(r => r.status === '进行中') || state.routes.find(r => r.status === '筹备中') || state.routes[0]
-        state.currentManualTodos = activeRoute?.manualTodos || []
-        state.currentAlerts = activeRoute?.routeReminders || []
+        hydrateRouteState(activeRoute)
       }
     } catch (e) {
       console.error('Failed to fetch routes:', e)
@@ -201,10 +223,7 @@ export function useRouteStore() {
     const route = state.routes.find(r => r.id === routeId)
     if (!route) return
     state.selectedHomeRouteId = route.id
-    state.currentSuggestions = []
-    state.currentEquipment = []
-    state.currentAlerts = route.routeReminders || []
-    state.currentManualTodos = route.manualTodos || []
+    hydrateRouteState(route)
   }
 
   // 获取其他行程
@@ -213,16 +232,24 @@ export function useRouteStore() {
     return state.routes.filter(r => r.id !== mainRoute.value?.id)
   })
 
-  const fetchAlertsAndSuggestions = async (route: Route) => {
+  const fetchAlertsAndSuggestions = async (route: Route, options: FetchAlertsOptions = {}) => {
     if (!route) {
       state.isAlertsLoading = false
       return
     }
 
-    const fetchKey = `${route.id}:${route.destination}:${route.startDate}`
+    const fetchKey = getAlertsFetchKey(route)
     const now = Date.now()
+
+    if (!options.force && route.routeRemindersGeneratedAt) {
+      hydrateRouteState(route)
+      state.lastAlertsFetchKey = fetchKey
+      state.lastAlertsFetchAt = now
+      return
+    }
+
     if (state.isAlertsLoading && state.lastAlertsFetchKey === fetchKey) return
-    if (state.lastAlertsFetchKey === fetchKey && now - state.lastAlertsFetchAt < 30000) return
+    if (!options.force && state.lastAlertsFetchKey === fetchKey && now - state.lastAlertsFetchAt < 30000) return
     state.lastAlertsFetchKey = fetchKey
     state.lastAlertsFetchAt = now
 
@@ -264,16 +291,35 @@ export function useRouteStore() {
 
       if (state.alertsRequestSeq !== requestSeq) return
 
-      state.currentAlerts = [
+      const nextAlerts = [
         ...persistedReminders,
         ...(weatherRes.alerts || []),
         ...(restrictionRes.data?.is_restricted ? [restrictionRes.data] : []),
         ...((newsRes && newsRes.alerts) || [])
       ]
+      const nextSuggestions = suggestionRes.data?.suggestions || []
+      const nextEquipment = suggestionRes.data?.equipment_list || []
 
-      state.currentSuggestions = suggestionRes.data?.suggestions || []
-      state.currentEquipment = suggestionRes.data?.equipment_list || []
+      state.currentAlerts = nextAlerts
+      state.currentSuggestions = nextSuggestions
+      state.currentEquipment = nextEquipment
       state.currentManualTodos = route.manualTodos || []
+
+      try {
+        const saveResult = await api.updateRouteReminders(route.id, nextAlerts)
+        const savedReminders = normalizeRouteReminders(saveResult?.data?.route_reminders || nextAlerts)
+        const generatedAt = saveResult?.data?.route_reminders_generated_at || new Date().toISOString()
+        const target = state.routes.find(r => r.id === route.id)
+        if (target) {
+          target.routeReminders = savedReminders
+          target.routeRemindersGeneratedAt = generatedAt
+        }
+        route.routeReminders = savedReminders
+        route.routeRemindersGeneratedAt = generatedAt
+        state.currentAlerts = savedReminders
+      } catch (saveError) {
+        console.error('Failed to persist route reminders:', saveError)
+      }
       
     } catch (e) {
       console.error('Failed to fetch alerts:', e)
@@ -349,7 +395,8 @@ export function useRouteStore() {
         totalDistance: planData.total_distance_km,
         schedule: planData.schedule, // 存入后端生成的每日日程
         manualTodos: normalizeManualTodos(planData.manual_todos),
-        routeReminders: normalizeRouteReminders(planData.route_reminders)
+        routeReminders: normalizeRouteReminders(planData.route_reminders),
+        routeRemindersGeneratedAt: null,
       }
       
       // 插入到最前面

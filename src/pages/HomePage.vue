@@ -338,10 +338,10 @@ const saveEditedTodo = async (todoId: string) => {
   await store.saveManualTodos(route.id, nextTodos)
 }
 
-const refreshHomeData = async () => {
+const refreshHomeData = async (options: { forceAlerts?: boolean } = {}) => {
   await store.fetchRoutes()
   if (homeRoute.value) {
-    await store.fetchAlertsAndSuggestions(homeRoute.value)
+    await store.fetchAlertsAndSuggestions(homeRoute.value, { force: options.forceAlerts })
   }
 }
 
@@ -358,7 +358,7 @@ onShow(async () => {
 })
 
 onPullDownRefresh(async () => {
-  await refreshHomeData()
+  await refreshHomeData({ forceAlerts: true })
   uni.stopPullDownRefresh()
 })
 
