@@ -1,8 +1,36 @@
 from flask_compat import APIRouter
+import time
 
 from llm_service import ask_kimi_json_with_web_search
 
 router = APIRouter()
+
+_CACHE_TTL_SECONDS = 6 * 60 * 60
+_restriction_cache: dict[str, tuple[float, dict]] = {}
+
+
+def _cache_key(city: str) -> str:
+    return (city or "").strip()
+
+
+def _get_cached(city: str) -> dict | None:
+    key = _cache_key(city)
+    if not key:
+        return None
+    cached = _restriction_cache.get(key)
+    if not cached:
+        return None
+    expires_at, payload = cached
+    if expires_at < time.time():
+        _restriction_cache.pop(key, None)
+        return None
+    return payload
+
+
+def _set_cached(city: str, payload: dict) -> None:
+    key = _cache_key(city)
+    if key:
+        _restriction_cache[key] = (time.time() + _CACHE_TTL_SECONDS, payload)
 
 
 @router.get("/api/v1/restriction/city")
@@ -10,6 +38,10 @@ def get_city_restriction(city: str):
     """
     获取指定城市的禁摩政策，通过 Kimi 内置联网搜索工具查询并总结。
     """
+
+    cached = _get_cached(city)
+    if cached:
+        return cached
 
     system_prompt = (
         "你是一个专业的摩托旅行规划助手。"
@@ -45,13 +77,15 @@ def get_city_restriction(city: str):
         if result_dict is None:
             raise Exception("Kimi 联网搜索返回为空或无法解析为 JSON")
 
-        return {
+        payload = {
             "status": "success",
             "city": city,
             "data": result_dict,
         }
+        _set_cached(city, payload)
+        return payload
     except Exception as e:
-        return {
+        payload = {
             "status": "error",
             "city": city,
             "message": str(e),
@@ -64,3 +98,5 @@ def get_city_restriction(city: str):
                 "time": "N/A",
             },
         }
+        _set_cached(city, payload)
+        return payload

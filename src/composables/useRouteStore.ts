@@ -52,7 +52,9 @@ const state = reactive({
   currentSuggestions: [] as any[],
   currentEquipment: [] as any[],
   currentManualTodos: [] as ManualTodo[],
-  selectedHomeRouteId: null as string | null
+  selectedHomeRouteId: null as string | null,
+  lastAlertsFetchKey: '',
+  lastAlertsFetchAt: 0,
 })
 
 const normalizeManualTodos = (raw: any): ManualTodo[] => {
@@ -216,6 +218,13 @@ export function useRouteStore() {
       state.isAlertsLoading = false
       return
     }
+
+    const fetchKey = `${route.id}:${route.destination}:${route.startDate}`
+    const now = Date.now()
+    if (state.isAlertsLoading && state.lastAlertsFetchKey === fetchKey) return
+    if (state.lastAlertsFetchKey === fetchKey && now - state.lastAlertsFetchAt < 30000) return
+    state.lastAlertsFetchKey = fetchKey
+    state.lastAlertsFetchAt = now
 
     // “建议完成”不依赖天气/禁摩/新闻接口，先同步展示后端已持久化的默认待办。
     const requestSeq = state.alertsRequestSeq + 1

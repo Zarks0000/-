@@ -1,5 +1,7 @@
 import json
 import os
+import time
+from threading import BoundedSemaphore
 from typing import Any, Optional
 
 import httpx
@@ -38,6 +40,39 @@ def _should_disable_thinking() -> bool:
 
 def is_configured() -> bool:
     return _api_key() is not None
+
+
+_KIMI_CONCURRENCY = max(1, int((os.getenv("KIMI_MAX_CONCURRENCY") or "2").strip() or "2"))
+_KIMI_SEMAPHORE = BoundedSemaphore(_KIMI_CONCURRENCY)
+
+
+def _post_chat_completion(client: httpx.Client, url: str, headers: dict[str, str], payload: dict[str, Any], label: str) -> dict[str, Any]:
+    last_error: Exception | None = None
+    with _KIMI_SEMAPHORE:
+        for attempt in range(3):
+            try:
+                resp = client.post(url, headers=headers, json=payload)
+                if resp.status_code == 429:
+                    if attempt < 2:
+                        time.sleep(1.2 * (attempt + 1))
+                        continue
+                    print(f"{label} rate limited after retries")
+                elif resp.status_code != 200:
+                    print(f"{label} Error: {resp.status_code} {resp.text[:300]}")
+                resp.raise_for_status()
+                return resp.json()
+            except httpx.HTTPStatusError as e:
+                last_error = e
+                if e.response.status_code == 429 and attempt < 2:
+                    time.sleep(1.2 * (attempt + 1))
+                    continue
+                raise e
+            except Exception as e:
+                last_error = e
+                raise e
+    if last_error:
+        raise last_error
+    raise RuntimeError(f"{label} request failed")
 
 
 def _extract_message_content(message: dict[str, Any]) -> str:
@@ -117,17 +152,11 @@ def ask_llm_json(system: str, user: str = "", max_tokens: int = 400) -> Optional
     url = _base_url().rstrip("/") + "/chat/completions"
 
     with httpx.Client(timeout=120) as client:
-        data = None
         # 对于 Moonshot Kimi，可能不支持 response_format="json_object"，我们直接不用它
         try:
             payload = base_payload
-            resp = client.post(url, headers=headers, json=payload)
-            if resp.status_code != 200:
-                print(f"LLM API Error: {resp.status_code} {resp.text}")
-            resp.raise_for_status()
-            data = resp.json()
+            data = _post_chat_completion(client, url, headers, payload, "LLM API")
         except httpx.HTTPStatusError as e:
-            print(f"LLM API Error: {e.response.status_code} {e.response.text}")
             raise e
         except Exception as e:
             print(f"LLM Network Error: {e}")
@@ -169,13 +198,8 @@ def ask_kimi_json_with_web_search(system: str, user: str, max_tokens: int = 800,
                 "tools": tools,
             }
             try:
-                resp = client.post(url, headers=headers, json=payload)
-                if resp.status_code != 200:
-                    print(f"Kimi Web Search API Error: {resp.status_code} {resp.text}")
-                resp.raise_for_status()
-                data = resp.json()
+                data = _post_chat_completion(client, url, headers, payload, "Kimi Web Search API")
             except httpx.HTTPStatusError as e:
-                print(f"Kimi Web Search API Error: {e.response.status_code} {e.response.text}")
                 raise e
             except Exception as e:
                 print(f"Kimi Web Search Network Error: {e}")

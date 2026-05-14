@@ -50,7 +50,6 @@ def get_smart_suggestions(destination: str, days: int, month: int, origin: Optio
         from amap_service import get_geocode, get_driving_route
         from llm_service import generate_plan, is_configured
         import weather as weather_module
-        import restriction as restriction_module
         import news as news_module
 
         llm_context = {
@@ -76,13 +75,13 @@ def get_smart_suggestions(destination: str, days: int, month: int, origin: Optio
                     }
 
         llm_context["weather"] = weather_module.get_weather_alerts(destination)
-        llm_context["policy"] = restriction_module.get_city_restriction(destination)
         if origin:
             llm_context["news"] = news_module.get_route_news_alerts(origin, destination, None, 6)
         else:
             llm_context["news"] = news_module.get_news_alerts(destination, 3)
 
-        if is_configured():
+        use_llm = str(__import__("os").getenv("SUGGESTIONS_USE_LLM") or "0").strip().lower() in {"1", "true", "yes", "on"}
+        if use_llm and is_configured():
             plan = generate_plan(llm_context)
             if isinstance(plan, dict):
                 risk_items = plan.get("risk_items") or []
