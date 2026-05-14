@@ -40,6 +40,45 @@ def is_configured() -> bool:
     return _api_key() is not None
 
 
+def _extract_message_content(message: dict[str, Any]) -> str:
+    raw_content = message.get("content") or ""
+    reasoning_content = message.get("reasoning_content") or ""
+
+    if isinstance(raw_content, list):
+        raw_content = "".join(
+            part.get("text", "") for part in raw_content if isinstance(part, dict)
+        )
+    if isinstance(reasoning_content, list):
+        reasoning_content = "".join(
+            part.get("text", "") for part in reasoning_content if isinstance(part, dict)
+        )
+
+    return str(raw_content).strip() or str(reasoning_content).strip()
+
+
+def _parse_json_content(content: str) -> Optional[dict[str, Any]]:
+    content = str(content or "").strip()
+    if not content:
+        return None
+
+    if content.startswith("```"):
+        lines = content.splitlines()
+        if len(lines) >= 3 and lines[0].startswith("```") and lines[-1].startswith("```"):
+            content = "\n".join(lines[1:-1]).strip()
+
+    try:
+        return json.loads(content)
+    except Exception:
+        start = content.find("{")
+        end = content.rfind("}")
+        if start >= 0 and end > start:
+            try:
+                return json.loads(content[start : end + 1])
+            except Exception:
+                return None
+        return None
+
+
 def _build_prompt(context: dict[str, Any]) -> tuple[str, str]:
     system = (
         "你是专业摩托旅行规划助手。你必须只输出严格 JSON，不要输出任何额外文本。"
@@ -95,38 +134,81 @@ def ask_llm_json(system: str, user: str = "", max_tokens: int = 400) -> Optional
             raise e
 
     message = (((data or {}).get("choices") or [{}])[0].get("message") or {})
-    raw_content = message.get("content") or ""
-    reasoning_content = message.get("reasoning_content") or ""
+    return _parse_json_content(_extract_message_content(message))
 
-    if isinstance(raw_content, list):
-        raw_content = "".join(
-            part.get("text", "") for part in raw_content if isinstance(part, dict)
-        )
-    if isinstance(reasoning_content, list):
-        reasoning_content = "".join(
-            part.get("text", "") for part in reasoning_content if isinstance(part, dict)
-        )
 
-    content = str(raw_content).strip() or str(reasoning_content).strip()
-    if not content:
+def ask_kimi_json_with_web_search(system: str, user: str, max_tokens: int = 800, max_rounds: int = 4) -> Optional[dict[str, Any]]:
+    key = _api_key()
+    if not key:
+        return None
+    if not _is_moonshot():
+        print("Kimi web search requires LLM_BASE_URL to point to Moonshot API.")
         return None
 
-    if content.startswith("```"):
-        lines = content.splitlines()
-        if len(lines) >= 3 and lines[0].startswith("```") and lines[-1].startswith("```"):
-            content = "\n".join(lines[1:-1]).strip()
+    messages: list[dict[str, Any]] = [
+        {"role": "system", "content": system},
+        {"role": "user", "content": user},
+    ]
+    headers = {"Authorization": f"Bearer {key}", "Content-Type": "application/json"}
+    url = _base_url().rstrip("/") + "/chat/completions"
+    tools = [
+        {
+            "type": "builtin_function",
+            "function": {"name": "$web_search"},
+        }
+    ]
 
-    try:
-        return json.loads(content)
-    except Exception:
-        start = content.find("{")
-        end = content.rfind("}")
-        if start >= 0 and end > start:
+    with httpx.Client(timeout=120) as client:
+        for _ in range(max_rounds):
+            payload = {
+                "model": _model(),
+                "temperature": 0.6,
+                "max_tokens": max_tokens,
+                "messages": messages,
+                "thinking": {"type": "disabled"},
+                "tools": tools,
+            }
             try:
-                return json.loads(content[start : end + 1])
-            except Exception:
-                return None
-        return None
+                resp = client.post(url, headers=headers, json=payload)
+                if resp.status_code != 200:
+                    print(f"Kimi Web Search API Error: {resp.status_code} {resp.text}")
+                resp.raise_for_status()
+                data = resp.json()
+            except httpx.HTTPStatusError as e:
+                print(f"Kimi Web Search API Error: {e.response.status_code} {e.response.text}")
+                raise e
+            except Exception as e:
+                print(f"Kimi Web Search Network Error: {e}")
+                raise e
+
+            choice = ((data or {}).get("choices") or [{}])[0]
+            message = choice.get("message") or {}
+            finish_reason = choice.get("finish_reason")
+            tool_calls = message.get("tool_calls") or []
+
+            if finish_reason == "tool_calls" and tool_calls:
+                messages.append(message)
+                for tool_call in tool_calls:
+                    function = tool_call.get("function") or {}
+                    name = function.get("name") or ""
+                    arguments = function.get("arguments") or "{}"
+                    try:
+                        tool_result = json.loads(arguments)
+                    except Exception:
+                        tool_result = arguments
+                    messages.append(
+                        {
+                            "role": "tool",
+                            "tool_call_id": tool_call.get("id"),
+                            "name": name,
+                            "content": json.dumps(tool_result, ensure_ascii=False),
+                        }
+                    )
+                continue
+
+            return _parse_json_content(_extract_message_content(message))
+
+    return None
 
 def generate_plan(context: dict[str, Any]) -> Optional[dict[str, Any]]:
     system, user = _build_prompt(context)
