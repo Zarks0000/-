@@ -82,6 +82,8 @@ SYSTEM_TODO_CANDIDATES = [
     "预留应急预算和备用现金",
 ]
 
+INITIAL_TODO_LIMIT = 3
+
 
 def _get_request_user_id(http_request: Request) -> Optional[str]:
     return get_current_user_id(
@@ -219,7 +221,7 @@ def _normalize_existing_todos(raw: Any) -> list[dict[str, Any]]:
     return out
 
 
-def _select_five_titles(selected: Any, estimated_days: int, distance_km: float) -> list[str]:
+def _select_initial_todo_titles(selected: Any, estimated_days: int, distance_km: float) -> list[str]:
     allowed = set(SYSTEM_TODO_CANDIDATES)
     titles: list[str] = []
     if isinstance(selected, list):
@@ -232,22 +234,22 @@ def _select_five_titles(selected: Any, estimated_days: int, distance_km: float) 
                 title = ""
             if title in allowed and title not in titles:
                 titles.append(title)
-            if len(titles) >= 5:
+            if len(titles) >= INITIAL_TODO_LIMIT:
                 break
 
     for title in _fallback_todo_titles(estimated_days, distance_km):
         canonical = _canonical_todo_title(title)
         if canonical in allowed and canonical not in titles:
             titles.append(canonical)
-        if len(titles) >= 5:
+        if len(titles) >= INITIAL_TODO_LIMIT:
             break
 
     for title in SYSTEM_TODO_CANDIDATES:
         if title not in titles:
             titles.append(title)
-        if len(titles) >= 5:
+        if len(titles) >= INITIAL_TODO_LIMIT:
             break
-    return titles[:5]
+    return titles[:INITIAL_TODO_LIMIT]
 
 
 def _build_todos_from_titles(titles: list[str], existing_todos: Any = None) -> list[dict[str, Any]]:
@@ -256,7 +258,7 @@ def _build_todos_from_titles(titles: list[str], existing_todos: Any = None) -> l
 
     selected = []
     selected_titles = set()
-    for title in titles[:5]:
+    for title in titles[:INITIAL_TODO_LIMIT]:
         old = by_title.get(title)
         selected_titles.add(title)
         selected.append(
@@ -406,7 +408,7 @@ def _generate_route_guidance(
 
     llm_result = None
     if not _env_bool("ROUTE_PLAN_USE_LLM", False):
-        selected_titles = _select_five_titles(None, estimated_days, distance_km)
+        selected_titles = _select_initial_todo_titles(None, estimated_days, distance_km)
         route_reminders = _normalize_route_reminders(None, fallback_reminders)
         manual_todos = _build_todos_from_titles(selected_titles, existing_todos)
         return {
@@ -427,10 +429,10 @@ def _generate_route_guidance(
         f"总里程约={round(float(distance_km or 0), 1)}km；出发日期={start_date.isoformat()}；"
         f"结束日期={end_date.isoformat()}；行程天数={int(estimated_days)}天。"
         "请基于这些城市、里程、日期和每日路书，完成两件事："
-        "1. 从系统候选事项中选择最适合本行程的 5 条建议完成项；"
+        f"1. 从系统候选事项中选择最适合本行程的 {INITIAL_TODO_LIMIT} 条建议完成项；"
         "2. 生成 2-4 条出行提醒。"
         "JSON 结构必须为："
-        "{\"selected_todos\":[string,string,string,string,string],"
+        "{\"selected_todos\":[string,string,string],"
         "\"reminders\":[{\"severity\":\"high|medium|low\",\"title\":string,\"description\":string}]}。"
         "selected_todos 必须逐字来自候选事项，不要自创事项。"
     )
@@ -446,7 +448,7 @@ def _generate_route_guidance(
     except Exception:
         llm_result = None
 
-    selected_titles = _select_five_titles(
+    selected_titles = _select_initial_todo_titles(
         (llm_result or {}).get("selected_todos"),
         estimated_days,
         distance_km,
